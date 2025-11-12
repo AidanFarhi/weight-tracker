@@ -8,17 +8,19 @@ import (
 
 func main() {
 
-	fs := http.StripPrefix("/web/", http.FileServer(http.Dir("./web")))
-
+	// create multiplexer
 	mux := http.NewServeMux()
 
-	mux.Handle("/web/", fs)
+	// register routes with multiplexer
+	mux.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("web"))))
 	mux.HandleFunc("/", handler.GetIndex)
 
+	// create server
 	server := http.Server{
 		Addr:    ":8899",
 		Handler: mux,
 	}
 
+	// start server
 	log.Fatal(server.ListenAndServe())
 }
