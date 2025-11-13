@@ -1,6 +1,11 @@
 body {
     margin: 0;
     font-family: 'Roboto';
+    font-weight: normal;
+}
+
+p {
+    margin: 0;
 }
 
 a {

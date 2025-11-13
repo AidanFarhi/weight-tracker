@@ -16,7 +16,9 @@
 }
 
 .login-app-name {
-    font-size: 24px;
+    font-size: 28px;
+    margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 .login-form {
@@ -59,4 +61,5 @@
 
 .login-common-text {
     margin-right: 10px;
+    opacity: 0.8;
 }
