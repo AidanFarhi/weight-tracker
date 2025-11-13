@@ -18,7 +18,7 @@ func HandleError(operation string, err error) {
 func main() {
 
 	// init handlers
-	ih := handler.NewIndexHandler()
+	hh := handler.NewHomeHandler()
 	lh := handler.NewLoginHandler()
 	rh := handler.NewRegisterHandler()
 
@@ -27,7 +27,7 @@ func main() {
 
 	// register routes with multiplexer
 	mux.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("web"))))
-	mux.HandleFunc("/", ih.GetIndex)
+	mux.HandleFunc("/", hh.GetHome)
 	mux.HandleFunc("GET /login", lh.GetLogin)
 	mux.HandleFunc("GET /register", rh.GetRegister)
 
