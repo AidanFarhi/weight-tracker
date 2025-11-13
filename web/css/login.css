@@ -21,6 +21,12 @@
     margin-bottom: 16px;
 }
 
+.login-error {
+    color: red;
+    font-size: 10px;
+    margin-bottom: 24px;
+}
+
 .login-form {
     display: flex;
     flex-direction: column;

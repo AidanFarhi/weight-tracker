@@ -30,6 +30,10 @@ Contains most of the business logic.
 
 Contains logic for interacting with the storage layer.
 
+`model`
+
+Contains all data objects.
+
 `web`
 
 Contains html/css/js/images.

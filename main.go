@@ -1,25 +1,24 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"weight-tracker/handler"
+	"weight-tracker/repo"
+	"weight-tracker/service"
 )
-
-func HandleError(operation string, err error) {
-	if err != nil {
-		fmt.Println("error "+operation+":", err.Error())
-		os.Exit(1)
-	}
-}
 
 func main() {
 
+	// init repos
+	ur := repo.NewUserRepo()
+
+	// init services
+	us := service.NewAuthService(ur)
+
 	// init handlers
 	hh := handler.NewHomeHandler()
-	lh := handler.NewLoginHandler()
+	ah := handler.NewAuthHandler(us)
 	rh := handler.NewRegisterHandler()
 
 	// create multiplexer
@@ -28,7 +27,8 @@ func main() {
 	// register routes with multiplexer
 	mux.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("web"))))
 	mux.HandleFunc("/", hh.GetHome)
-	mux.HandleFunc("GET /login", lh.GetLogin)
+	mux.HandleFunc("GET /login", ah.GetLogin)
+	mux.HandleFunc("POST /login", ah.PostLogin)
 	mux.HandleFunc("GET /register", rh.GetRegister)
 
 	// create server

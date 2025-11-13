@@ -1,5 +1,5 @@
 {{ define "login" }}
-{{ template "base" }}
+{{ template "base" . }}
 {{ end }}
 {{ define "styles"}}
 <link rel="stylesheet" href="/web/css/login.css">
@@ -8,9 +8,12 @@
 <div class="login-main-container">
     <img class="login-image" src="/web/images/weight-tracker-icon.png" alt="the main icon">
     <p class="login-app-name">Weight Tracker</p>
-    <form class="login-form" action="/api/v1/login">
-        <input class="login-input" type="text" placeholder="Email">
-        <input class="login-input" type="password" placeholder="Password">
+    {{ if .LoginError }}
+    <p class="login-error">{{ .LoginErrorMessage }}</p>
+    {{ end }}
+    <form class="login-form" action="/login" method="post">
+        <input class="login-input" type="text" placeholder="Email" name="email" required>
+        <input class="login-input" type="password" placeholder="Password" name="password" required>
         <button class="login-button" type="submit">Login</button>
         <a class="login-link" id="login-forgot-password" href="/password-reset">Forgot password?</a>
     </form>
