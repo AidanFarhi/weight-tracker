@@ -2,16 +2,17 @@
 {{ template "base" }}
 {{ end }}
 {{ define "styles"}}
+<link rel="stylesheet" href="/web/css/login.css">
 {{ end }}
 {{ define "content" }}
 <div class="login-main-container">
-    <img src="/web/images/weight-tracker-icon.png" alt="the main icon">
+    <img class="login-image" src="/web/images/weight-tracker-icon.png" alt="the main icon">
     <p class="login-app-name">Weight Tracker</p>
     <form class="login-form" action="/api/v1/login">
-        <input type="text">
-        <input type="text">
-        <button type="submit">Login</button>
-        <a class="login-link" href="/password-reset">Forgot password?</a>
+        <input class="login-input" type="text" placeholder="Email">
+        <input class="login-input" type="password" placeholder="Password">
+        <button class="login-button" type="submit">Login</button>
+        <a class="login-link" id="login-forgot-password" href="/password-reset">Forgot password?</a>
     </form>
     <div class="login-form-bottom-container">   
         <p class="login-common-text">Don't have an account?</p>
