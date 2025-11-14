@@ -7,10 +7,14 @@ import (
 
 type RegisterService struct {
 	ur *repo.UserRepo
+	sr *repo.SessionRepo
 }
 
-func NewRegisterService(ur *repo.UserRepo) *RegisterService {
-	return &RegisterService{ur}
+func NewRegisterService(ur *repo.UserRepo, sr *repo.SessionRepo) *RegisterService {
+	return &RegisterService{
+		ur: ur,
+		sr: sr,
+	}
 }
 
 func (as *RegisterService) Register(email, password string) (string, error) {
@@ -21,13 +25,16 @@ func (as *RegisterService) Register(email, password string) (string, error) {
 	}
 
 	// create a user
-	_, err = as.ur.CreateUser(email, password)
+	userId, err := as.ur.CreateUser(email, password)
 	if err != nil {
 		return "", errors.New("error creating user")
 	}
 
 	// create a session with the user id using session repo
-	sessionId := "sessionId1234"
+	sessionId, err := as.sr.CreateSession(userId)
+	if err != nil {
+		return "", err
+	}
 
 	return sessionId, nil
 }

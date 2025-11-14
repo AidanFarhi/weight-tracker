@@ -80,7 +80,7 @@ func (rh *RegisterHandler) PostRegister(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// attempt to register a user
-	_, err := rh.rs.Register(email, password)
+	sessionId, err := rh.rs.Register(email, password)
 
 	if err != nil {
 		if err.Error() == "user already exists" {
@@ -104,9 +104,6 @@ func (rh *RegisterHandler) PostRegister(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Error while registering a user: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	// generate a session using the userId
-	sessionId := "sessionId1234"
 
 	// store session id in cookie
 	cookie := &http.Cookie{

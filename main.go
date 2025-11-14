@@ -12,10 +12,11 @@ func main() {
 
 	// init repos
 	ur := repo.NewUserRepo()
+	sr := repo.NewSessionRepo()
 
 	// init services
-	us := service.NewAuthService(ur)
-	rs := service.NewRegisterService(ur)
+	us := service.NewAuthService(ur, sr)
+	rs := service.NewRegisterService(ur, sr)
 
 	// init handlers
 	hh := handler.NewHomeHandler()
