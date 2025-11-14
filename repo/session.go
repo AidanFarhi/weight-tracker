@@ -42,12 +42,13 @@ func (sr *SessionRepo) DeleteSession(sessionId string) error {
 }
 
 func (sr *SessionRepo) GetUserIdForSession(sessionId string) (int, error) {
+	// TODO: throw an actual DB error if there is one while querying
 	for _, s := range sr.Db {
 		if s.Id == sessionId {
 			return s.UserId, nil
 		}
 	}
-	return -1, errors.New("no user id found")
+	return -1, nil
 }
 
 func generateSessionId() string {

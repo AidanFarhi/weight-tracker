@@ -32,3 +32,14 @@ func (as *AuthService) Login(email, password string) (string, error) {
 }
 
 func (as *AuthService) Logout() {}
+
+func (as *AuthService) ValidateSession(sessionId string) (int, error) {
+	userId, err := as.sr.GetUserIdForSession(sessionId)
+	if err != nil {
+		return -1, err
+	}
+	if userId == -1 {
+		return -1, ErrNoSessionFound
+	}
+	return userId, nil
+}

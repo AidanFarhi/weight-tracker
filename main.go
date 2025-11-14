@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"weight-tracker/handler"
+	"weight-tracker/middleware"
 	"weight-tracker/repo"
 	"weight-tracker/service"
 )
@@ -15,12 +16,15 @@ func main() {
 	sr := repo.NewSessionRepo()
 
 	// init services
-	us := service.NewAuthService(ur, sr)
+	as := service.NewAuthService(ur, sr)
 	rs := service.NewRegisterService(ur, sr)
+
+	// init middleware
+	am := middleware.NewAuthMiddleware(as)
 
 	// init handlers
 	hh := handler.NewHomeHandler()
-	ah := handler.NewAuthHandler(us)
+	ah := handler.NewAuthHandler(as)
 	rh := handler.NewRegisterHandler(rs)
 
 	// create multiplexer
@@ -28,11 +32,11 @@ func main() {
 
 	// register routes with multiplexer
 	mux.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("web"))))
-	mux.HandleFunc("/", hh.GetHome)
-	mux.HandleFunc("GET /login", ah.GetLogin)
-	mux.HandleFunc("POST /login", ah.PostLogin)
-	mux.HandleFunc("GET /register", rh.GetRegister)
-	mux.HandleFunc("POST /register", rh.PostRegister)
+	mux.HandleFunc("/", am.RequireAuth(hh.GetHome))
+	mux.HandleFunc("GET /login", am.RedirectIfLoggedIn(ah.GetLogin))
+	mux.HandleFunc("POST /login", am.RedirectIfLoggedIn(ah.PostLogin))
+	mux.HandleFunc("GET /register", am.RedirectIfLoggedIn(rh.GetRegister))
+	mux.HandleFunc("POST /register", am.RedirectIfLoggedIn(rh.PostRegister))
 
 	// create server
 	server := http.Server{
