@@ -35,6 +35,8 @@ func (ur *UserRepo) CreateUser(email, password string) (int, error) {
 	return newUser.Id, nil
 }
 
+// TODO: change the return to only throw an error if there is a SQL DB error.
+// otherwise, it should be a boolean?
 func (ur *UserRepo) CheckIfUserExists(email string) error {
 	for _, u := range ur.Db {
 		if u.Email == email {
