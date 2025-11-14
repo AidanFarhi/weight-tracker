@@ -12,12 +12,11 @@ func NewAuthService(ur *repo.UserRepo) *AuthService {
 
 func (as *AuthService) Login(email, password string) (string, error) {
 	// check user credentials
-	err := as.ur.ValidateCredentials(email, password)
+	_, err := as.ur.GetIdForUser(email, password)
 	if err != nil {
 		return "", err
 	}
-	// attempt to create a session
-	// TODO
+	// attempt to create a session using userId and session repo
 
 	// return newly created session id
 	return "sessionid123456", nil

@@ -1,5 +1,5 @@
 {{ define "register" }}
-{{ template "base" }}
+{{ template "base" . }}
 {{ end }}
 {{ define "styles"}}
 <link rel="stylesheet" href="/web/css/register.css">
@@ -9,13 +9,16 @@
     <p class="register-app-name">Weight Tracker</p>
     <p id="sub-text-1" class="register-app-sub-text">Welcome to the app</p>
     <p id="sub-text-2" class="register-app-sub-text">Create a free account</p>
-    <form class="register-form" action="/api/v1/register">
+    {{ if .RegisterError }}
+    <p class="register-error">{{ .RegisterErrorMessage }}</p>
+    {{ end }}
+    <form class="register-form" action="/register" method="post">
         <label class="register-input-label" for="register-email">Email</label>
-        <input id="register-email" class="register-input" type="text">
+        <input id="register-email" class="register-input" type="text" name="register-email">
         <label class="register-input-label" for="register-password">Password</label>
-        <input id="register-password" class="register-input" type="password">
+        <input id="register-password" class="register-input" type="password" name="register-password">
         <label class="register-input-label" for="register-password-repeat">Repeat Password</label>
-        <input id="register-password-repeat" class="register-input" type="password">
+        <input id="register-password-repeat" class="register-input" type="password" name="register-password-repeat">
         <button class="register-button" type="submit">Register</button>
     </form>
     <div class="register-form-bottom-container">   

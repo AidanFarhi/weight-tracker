@@ -15,11 +15,12 @@ func main() {
 
 	// init services
 	us := service.NewAuthService(ur)
+	rs := service.NewRegisterService(ur)
 
 	// init handlers
 	hh := handler.NewHomeHandler()
 	ah := handler.NewAuthHandler(us)
-	rh := handler.NewRegisterHandler()
+	rh := handler.NewRegisterHandler(rs)
 
 	// create multiplexer
 	mux := http.NewServeMux()
@@ -30,6 +31,7 @@ func main() {
 	mux.HandleFunc("GET /login", ah.GetLogin)
 	mux.HandleFunc("POST /login", ah.PostLogin)
 	mux.HandleFunc("GET /register", rh.GetRegister)
+	mux.HandleFunc("POST /register", rh.PostRegister)
 
 	// create server
 	server := http.Server{
