@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"text/template"
 	"weight-tracker/model"
 	"weight-tracker/service"
 )
@@ -22,15 +21,13 @@ func NewRegisterHandler(rs *service.RegisterService) *RegisterHandler {
 }
 
 func (rh *RegisterHandler) GetRegister(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles(
-		"./web/templates/base.html",
-		"./web/templates/pages/register.html",
-	)
+	err := RenderPage(w, "register", model.SimplePageData{
+		HasError:     false,
+		ErrorMessage: "",
+	})
 	if err != nil {
-		http.Error(w, "Template parsing error: "+err.Error(), http.StatusInternalServerError)
-		return
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-	t.ExecuteTemplate(w, "register", nil)
 }
 
 func (rh *RegisterHandler) PostRegister(w http.ResponseWriter, r *http.Request) {
@@ -41,40 +38,24 @@ func (rh *RegisterHandler) PostRegister(w http.ResponseWriter, r *http.Request) 
 
 	// check if credentials are missing
 	if email == "" || password == "" || passwordRepeat == "" {
-		t, err := template.ParseFiles(
-			"./web/templates/base.html",
-			"./web/templates/pages/register.html",
-		)
-		if err != nil {
-			http.Error(w, "Template parsing error: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
-		err = t.ExecuteTemplate(w, "register", model.RegisterPageData{
-			RegisterError:        true,
-			RegisterErrorMessage: emptyFieldErrorMessage,
+		err := RenderPage(w, "register", model.SimplePageData{
+			HasError:     true,
+			ErrorMessage: emptyFieldErrorMessage,
 		})
 		if err != nil {
-			http.Error(w, "Template execution error: "+err.Error(), http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		return
 	}
 
 	// check if passwords match
 	if password != passwordRepeat {
-		t, err := template.ParseFiles(
-			"./web/templates/base.html",
-			"./web/templates/pages/register.html",
-		)
-		if err != nil {
-			http.Error(w, "Template parsing error: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
-		err = t.ExecuteTemplate(w, "register", model.RegisterPageData{
-			RegisterError:        true,
-			RegisterErrorMessage: passwordNotMatchingErrorMessage,
+		err := RenderPage(w, "register", model.SimplePageData{
+			HasError:     true,
+			ErrorMessage: passwordNotMatchingErrorMessage,
 		})
 		if err != nil {
-			http.Error(w, "Template execution error: "+err.Error(), http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		return
 	}
@@ -82,26 +63,20 @@ func (rh *RegisterHandler) PostRegister(w http.ResponseWriter, r *http.Request) 
 	// attempt to register a user
 	sessionId, err := rh.rs.Register(email, password)
 
-	if err != nil {
-		if err.Error() == "user already exists" {
-			t, err := template.ParseFiles(
-				"./web/templates/base.html",
-				"./web/templates/pages/register.html",
-			)
-			if err != nil {
-				http.Error(w, "Template parsing error: "+err.Error(), http.StatusInternalServerError)
-				return
-			}
-			err = t.ExecuteTemplate(w, "register", model.RegisterPageData{
-				RegisterError:        true,
-				RegisterErrorMessage: userAlreadyExistsErrorMessage,
-			})
-			if err != nil {
-				http.Error(w, "Template execution error: "+err.Error(), http.StatusInternalServerError)
-			}
-			return
+	if err.Error() == "user already exists" {
+		err := RenderPage(w, "register", model.SimplePageData{
+			HasError:     true,
+			ErrorMessage: userAlreadyExistsErrorMessage,
+		})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
-		http.Error(w, "Error while registering a user: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// some other error occured
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 

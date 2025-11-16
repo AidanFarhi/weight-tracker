@@ -8,8 +8,8 @@
 <div class="login-main-container">
     <img class="login-image" src="/web/images/weight-tracker-icon.png" alt="the main icon">
     <p class="login-app-name">Weight Tracker</p>
-    {{ if .LoginError }}
-    <p class="login-error">{{ .LoginErrorMessage }}</p>
+    {{ if .HasError }}
+    <p class="login-error">{{ .ErrorMessage }}</p>
     {{ end }}
     <form class="login-form" action="/login" method="post">
         <input class="login-input" type="text" placeholder="Email" name="email" required>

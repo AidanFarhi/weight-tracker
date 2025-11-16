@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"text/template"
 	"weight-tracker/model"
 	"weight-tracker/service"
 )
@@ -21,18 +20,12 @@ func NewAuthHandler(as *service.AuthService) *AuthHandler {
 }
 
 func (ah *AuthHandler) GetLogin(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles(
-		"./web/templates/base.html",
-		"./web/templates/pages/login.html",
-	)
+	err := RenderPage(w, "login", model.SimplePageData{
+		HasError:     false,
+		ErrorMessage: "",
+	})
 	if err != nil {
-		http.Error(w, "Template parsing error: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-	err = t.ExecuteTemplate(w, "login", nil)
-	if err != nil {
-		http.Error(w, "Template execution error: "+err.Error(), http.StatusInternalServerError)
-		return
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -43,20 +36,12 @@ func (ah *AuthHandler) PostLogin(w http.ResponseWriter, r *http.Request) {
 
 	// check if credentials are missing
 	if email == "" || password == "" {
-		t, err := template.ParseFiles(
-			"./web/templates/base.html",
-			"./web/templates/pages/login.html",
-		)
-		if err != nil {
-			http.Error(w, "Template parsing error: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
-		err = t.ExecuteTemplate(w, "login", model.LoginPageData{
-			LoginError:        true,
-			LoginErrorMessage: emptyEmailOrPasswordMessage,
+		err := RenderPage(w, "login", model.SimplePageData{
+			HasError:     true,
+			ErrorMessage: emptyEmailOrPasswordMessage,
 		})
 		if err != nil {
-			http.Error(w, "Template execution error: "+err.Error(), http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		return
 	}
@@ -66,20 +51,12 @@ func (ah *AuthHandler) PostLogin(w http.ResponseWriter, r *http.Request) {
 
 	// check if the error is due to no records found
 	if err != nil {
-		t, err := template.ParseFiles(
-			"./web/templates/base.html",
-			"./web/templates/pages/login.html",
-		)
-		if err != nil {
-			http.Error(w, "Template parsing error: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
-		err = t.ExecuteTemplate(w, "login", model.LoginPageData{
-			LoginError:        true,
-			LoginErrorMessage: invalidCredentialsMessage,
+		err := RenderPage(w, "login", model.SimplePageData{
+			HasError:     true,
+			ErrorMessage: invalidCredentialsMessage,
 		})
 		if err != nil {
-			http.Error(w, "Template execution error: "+err.Error(), http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		return
 	}

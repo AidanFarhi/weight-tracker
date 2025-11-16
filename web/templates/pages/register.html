@@ -9,8 +9,8 @@
     <p class="register-app-name">Weight Tracker</p>
     <p id="sub-text-1" class="register-app-sub-text">Welcome to the app</p>
     <p id="sub-text-2" class="register-app-sub-text">Create a free account</p>
-    {{ if .RegisterError }}
-    <p class="register-error">{{ .RegisterErrorMessage }}</p>
+    {{ if .HasError }}
+    <p class="register-error">{{ .ErrorMessage }}</p>
     {{ end }}
     <form class="register-form" action="/register" method="post">
         <label class="register-input-label" for="register-email">Email</label>
