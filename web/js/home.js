@@ -1,29 +1,20 @@
-const ctx = document.getElementById('weight-chart');
+const ctx = document.getElementById('weight-chart')
 
-// Fetch data from your API
 async function fetchWeightData() {
     try {
-        const response = await fetch('/api/daily-weights'); // Replace with your API endpoint
+        const response = await fetch('/api/daily-weights')
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`)
         }
-        const rawData = await response.json();
-
-        // Sort chronologically
-        const sorted = rawData.sort((a, b) => new Date(a.entryDate) - new Date(b.entryDate));
-
+        const rawData = await response.json()
+        const sorted = rawData.sort((a, b) => new Date(a.entryDate) - new Date(b.entryDate))
         // Convert dates to MM/DD
         const labels = sorted.map(item => {
-            const d = new Date(item.entryDate);
-            return `${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getDate().toString().padStart(2, '0')}`;
-        });
+            const d = new Date(item.entryDate + "T00:00:00")
+            return `${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getDate().toString().padStart(2, '0')}`
+        })
+        const weights = sorted.map(item => item.weight)
 
-        const weights = sorted.map(item => item.weight);
-
-        const minWeight = Math.min(...weights);
-        const maxWeight = Math.max(...weights);
-
-        // Create the chart
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -40,31 +31,48 @@ async function fetchWeightData() {
                 }]
             },
             options: {
+                borderColor: 'transparent',
                 plugins: {
-                    legend: {
-                        display: false
-                    }
+                    legend: { display: false }
                 },
                 scales: {
-                    y: {
-                        beginAtZero: false,
+                    x: {
                         grid: {
                             display: true,
-                            color: 'grey'
+                            color: 'transparent',   // hides grid line color
+                            drawBorder: false,      // <-- disable the axis line at left/right
+                            drawTicks: false        // optional: don't draw ticks
                         },
-                        suggestedMin: minWeight - 5,
-                        suggestedMax: maxWeight + 5,
+                        border: {
+                            display: false,
+                            color: 'transparent'
+                        },
+                        ticks: {
+                            color: '#666' // label color only
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: true,
+                            color: 'grey',
+                            drawBorder: false,      // <-- disable the y-axis border that sits at the left
+                            drawTicks: true
+                        },
+                        border: {
+                            display: false,
+                            color: 'transparent'
+                        },
                         ticks: {
                             stepSize: 5
-                        },
+                        }
                     }
                 }
             }
-        });
+
+        })
     } catch (error) {
-        console.error('Error fetching weight data:', error);
+        console.error('Error fetching weight data:', error)
     }
 }
 
-// Call the function to fetch data and render chart
-fetchWeightData();
+fetchWeightData()
