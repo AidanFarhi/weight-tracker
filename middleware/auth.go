@@ -6,10 +6,6 @@ import (
 	"weight-tracker/service"
 )
 
-type contextKey string
-
-const userIDKey contextKey = "userID"
-
 type AuthMiddleware struct {
 	as *service.AuthService
 }
@@ -45,7 +41,7 @@ func (am *AuthMiddleware) RequireAuth(next http.HandlerFunc) http.HandlerFunc {
 			http.Error(w, "Error validating session: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
-		ctx := context.WithValue(r.Context(), userIDKey, userId)
+		ctx := context.WithValue(r.Context(), UserIDKey, userId)
 		next(w, r.WithContext(ctx))
 	}
 }

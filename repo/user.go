@@ -1,7 +1,6 @@
 package repo
 
 import (
-	"errors"
 	"weight-tracker/model"
 )
 
@@ -43,7 +42,7 @@ func (ur *UserRepo) CheckIfUserExists(email string) error {
 			return nil
 		}
 	}
-	return errors.New("no matching user")
+	return ErrUserNotFound
 }
 
 func (ur *UserRepo) GetIdForUser(email, password string) (int, error) {
@@ -52,5 +51,5 @@ func (ur *UserRepo) GetIdForUser(email, password string) (int, error) {
 			return u.Id, nil
 		}
 	}
-	return -1, errors.New("no matching credentials")
+	return -1, ErrUserNotFound
 }

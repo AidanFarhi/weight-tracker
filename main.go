@@ -14,10 +14,12 @@ func main() {
 	// init repos
 	ur := repo.NewUserRepo()
 	sr := repo.NewSessionRepo()
+	wr := repo.NewWeightRepo()
 
 	// init services
 	as := service.NewAuthService(ur, sr)
 	rs := service.NewRegisterService(ur, sr)
+	ws := service.NewWeightService(wr)
 
 	// init middleware
 	am := middleware.NewAuthMiddleware(as)
@@ -26,6 +28,7 @@ func main() {
 	hh := handler.NewHomeHandler()
 	ah := handler.NewAuthHandler(as)
 	rh := handler.NewRegisterHandler(rs)
+	wh := handler.NewWeightHandler(ws)
 
 	// create multiplexer
 	mux := http.NewServeMux()
@@ -37,6 +40,7 @@ func main() {
 	mux.HandleFunc("POST /login", am.RedirectIfLoggedIn(ah.PostLogin))
 	mux.HandleFunc("GET /register", am.RedirectIfLoggedIn(rh.GetRegister))
 	mux.HandleFunc("POST /register", am.RedirectIfLoggedIn(rh.PostRegister))
+	mux.HandleFunc("GET /api/daily-weights", am.RequireAuth(wh.GetDailyWeights))
 
 	// create server
 	server := http.Server{
