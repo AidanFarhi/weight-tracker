@@ -5,7 +5,27 @@
 <link rel="stylesheet" href="/web/css/home.css">
 {{ end }}
 {{ define "content" }}
-<p>Welcome to the home page</p>
+<div class="home-main-container">
+    <div class="home-top-banner">
+        <p class="home-top-banner-text">My Weight</p>
+        <img class="user-icon" src="/web/images/user-icon.png" alt="user icon">
+    </div>
+    <div class="home-weight-container">
+        <div class="home-weight-component">
+            <p class="home-weight-amount">179 lb</p>
+            <p class="home-weight-sub-text">Current</p>
+        </div>
+        <div class="home-weight-component">
+            <p class="home-weight-amount">179 lb</p>
+            <p class="home-weight-sub-text">Target</p>
+            <!-- <img class="edit-icon" src="/web/images/edit-icon.png" alt="edit icon"> -->
+        </div>
+    </div>
+    <!-- <p class="home-weight-chart-title">Progress</p> -->
+    <canvas id="weight-chart"></canvas>
+    <img class="plus-icon" src="/web/images/plus-icon.png" alt="plus icon">
+</div>
 {{ end }}
 {{ define "scripts" }}
+<script src="/web/js/home.js"></script>
 {{ end }}
