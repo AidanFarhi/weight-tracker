@@ -41,3 +41,12 @@ Contains all data objects.
 Contains html/css/js/images.
 
 
+## Todos
+
+- If user enters a weight for a date that already exists, it needs to update.
+
+- Add constraints to the weight entry forms to not allow floating numbers.
+
+- Consider adding a grid view that lets you edit and update.
+
+- Add a line to the graph that shows the target weight.
