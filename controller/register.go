@@ -6,12 +6,6 @@ import (
 	"weight-tracker/service"
 )
 
-const (
-	emptyFieldErrorMessage          = "Please provide an email and a valid password."
-	passwordNotMatchingErrorMessage = "Passwords do not match."
-	userAlreadyExistsErrorMessage   = "A user with that email address already exists."
-)
-
 type RegisterController struct {
 	rs *service.RegisterService
 }
@@ -40,7 +34,7 @@ func (rc *RegisterController) PostRegister(w http.ResponseWriter, r *http.Reques
 	if email == "" || password == "" || passwordRepeat == "" {
 		err := RenderPage(w, "register", model.SimplePageData{
 			HasError:     true,
-			ErrorMessage: emptyFieldErrorMessage,
+			ErrorMessage: EmptyFieldErrorMessage,
 		})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -52,7 +46,7 @@ func (rc *RegisterController) PostRegister(w http.ResponseWriter, r *http.Reques
 	if password != passwordRepeat {
 		err := RenderPage(w, "register", model.SimplePageData{
 			HasError:     true,
-			ErrorMessage: passwordNotMatchingErrorMessage,
+			ErrorMessage: PasswordNotMatchingErrorMessage,
 		})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -66,7 +60,7 @@ func (rc *RegisterController) PostRegister(w http.ResponseWriter, r *http.Reques
 	if err.Error() == "user already exists" {
 		err := RenderPage(w, "register", model.SimplePageData{
 			HasError:     true,
-			ErrorMessage: userAlreadyExistsErrorMessage,
+			ErrorMessage: UserAlreadyExistsErrorMessage,
 		})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

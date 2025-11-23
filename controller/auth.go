@@ -6,11 +6,6 @@ import (
 	"weight-tracker/service"
 )
 
-const (
-	invalidCredentialsMessage   = "Sorry. We could not find a match for your email and/or password."
-	emptyEmailOrPasswordMessage = "Please provide both email and password."
-)
-
 type AuthController struct {
 	as *service.AuthService
 }
@@ -38,7 +33,7 @@ func (ac *AuthController) PostLogin(w http.ResponseWriter, r *http.Request) {
 	if email == "" || password == "" {
 		err := RenderPage(w, "login", model.SimplePageData{
 			HasError:     true,
-			ErrorMessage: emptyEmailOrPasswordMessage,
+			ErrorMessage: EmptyEmailOrPasswordMessage,
 		})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -53,7 +48,7 @@ func (ac *AuthController) PostLogin(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		err := RenderPage(w, "login", model.SimplePageData{
 			HasError:     true,
-			ErrorMessage: invalidCredentialsMessage,
+			ErrorMessage: InvalidCredentialsMessage,
 		})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
