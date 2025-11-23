@@ -92,3 +92,9 @@ func (wr *WeightRepo) GetLatestTargetWeightForUser(userId int) (model.WeightEntr
 	}
 	return latestTargetWeight, nil
 }
+
+func (wr *WeightRepo) CreateWeightEntry(weightEntry model.WeightEntry) error {
+	weightEntry.Id = 1 // hardcode as one for now
+	wr.Db = append(wr.Db, weightEntry)
+	return nil
+}

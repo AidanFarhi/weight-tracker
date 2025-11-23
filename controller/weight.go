@@ -2,10 +2,10 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"weight-tracker/middleware"
+	"weight-tracker/repo"
 	"weight-tracker/service"
 )
 
@@ -48,13 +48,17 @@ func (wh *WeightController) PostDailyWeightEntry(w http.ResponseWriter, r *http.
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
+	date := r.FormValue("date")
 	weightStr := r.FormValue("weight")
-	weight, err := strconv.ParseFloat(weightStr, 64)
+	weight, err := strconv.ParseInt(weightStr, 10, 0)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// make a call to the service to put a weight entry value
-	fmt.Println(userId, weight)
+	err = wh.ws.CreateWeightEntry(userId, int(weight), repo.CATEGORY_DAILY, date)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	http.Redirect(w, r, "/", http.StatusFound)
 }
