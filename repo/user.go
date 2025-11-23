@@ -16,8 +16,8 @@ func NewUserRepo() *UserRepo {
 		Db: []model.User{
 			{
 				Id:       1,
-				Email:    "example.email@gmail.com",
-				Password: "secretpassword123",
+				Email:    "wert",
+				Password: "wert",
 			},
 		},
 	}

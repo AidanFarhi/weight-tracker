@@ -43,6 +43,8 @@ func main() {
 	mux.HandleFunc("GET /daily-weight-entry", am.RequireAuth(wc.GetDailyWeightEntry))
 	mux.HandleFunc("POST /daily-weight-entry", am.RequireAuth(wc.PostDailyWeightEntry))
 	mux.HandleFunc("GET /api/daily-weights", am.RequireAuth(wc.GetDailyWeights))
+	mux.HandleFunc("GET /target-weight-entry", am.RequireAuth(wc.GetTargetWeightEntry))
+	mux.HandleFunc("POST /target-weight-entry", am.RequireAuth(wc.PostTargetWeightEntry))
 
 	// create server
 	server := http.Server{

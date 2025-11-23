@@ -1,6 +1,7 @@
 package service
 
 import (
+	"time"
 	"weight-tracker/model"
 	"weight-tracker/repo"
 )
@@ -26,6 +27,9 @@ func (ws *WeightService) GetLatestTargetWeightForUser(userId int) (model.WeightE
 }
 
 func (ws *WeightService) CreateWeightEntry(userId int, weight int, category string, date string) error {
+	if category == repo.CATEGORY_TARGET {
+		date = time.Now().Format("2006-01-02")
+	}
 	weightEntry := model.WeightEntry{
 		UserId:    userId,
 		Weight:    weight,

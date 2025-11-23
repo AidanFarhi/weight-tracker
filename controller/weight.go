@@ -62,3 +62,30 @@ func (wh *WeightController) PostDailyWeightEntry(w http.ResponseWriter, r *http.
 	}
 	http.Redirect(w, r, "/", http.StatusFound)
 }
+
+func (wh *WeightController) GetTargetWeightEntry(w http.ResponseWriter, r *http.Request) {
+	err := RenderPage(w, "target-weight-entry", nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func (wh *WeightController) PostTargetWeightEntry(w http.ResponseWriter, r *http.Request) {
+	userId, ok := r.Context().Value(middleware.UserIDKey).(int)
+	if !ok {
+		http.Redirect(w, r, "/login", http.StatusFound)
+		return
+	}
+	weightStr := r.FormValue("weight")
+	weight, err := strconv.ParseInt(weightStr, 10, 0)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = wh.ws.CreateWeightEntry(userId, int(weight), repo.CATEGORY_TARGET, "")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
+}

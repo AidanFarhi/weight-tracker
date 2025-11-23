@@ -6,26 +6,19 @@
 {{ end }}
 {{ define "content" }}
 <div class="target-weight-entry-main-container">
-    <p class="register-app-name">Weight Tracker</p>
-    <p id="sub-text-1" class="register-app-sub-text">Welcome to the app</p>
-    <p id="sub-text-2" class="register-app-sub-text">Create a free account</p>
-    {{ if .HasError }}
-    <p class="register-error">{{ .ErrorMessage }}</p>
-    {{ end }}
-    <form class="register-form" action="/register" method="post">
-        <label class="register-input-label" for="register-email">Email</label>
-        <input id="register-email" class="register-input" type="text" name="register-email">
-        <label class="register-input-label" for="register-password">Password</label>
-        <input id="register-password" class="register-input" type="password" name="register-password">
-        <label class="register-input-label" for="register-password-repeat">Repeat Password</label>
-        <input id="register-password-repeat" class="register-input" type="password" name="register-password-repeat">
-        <button class="register-button" type="submit">Register</button>
+    <p class="target-weight-entry-title">Enter Target Weight</p>
+    <form class="target-weight-entry-form" action="/target-weight-entry" method="post">
+        <input 
+            id="target-weight-entry-weight-input" 
+            class="target-weight-entry-input" 
+            type="number"
+            name="weight"
+            autofocus
+        >
+        <button class="target-weight-entry-button" type="submit">Save</button>
     </form>
-    <div class="register-form-bottom-container">   
-        <p class="register-common-text">Already have an account?</p>
-        <a class="register-link" href="/login">Login</a>
-    </div>
 </div>
 {{ end }}
 {{ define "scripts" }}
+<script src="/web/js/target-weight-entry.js"></script>
 {{ end }}

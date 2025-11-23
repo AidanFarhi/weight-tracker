@@ -17,42 +17,42 @@ func NewWeightRepo() *WeightRepo {
 				UserId:    1,
 				Weight:    198,
 				EntryDate: "2025-11-01",
-				Category:  "daily",
+				Category:  CATEGORY_DAILY,
 			},
 			{
 				Id:        2,
 				UserId:    1,
 				Weight:    195,
 				EntryDate: "2025-11-02",
-				Category:  "daily",
+				Category:  CATEGORY_DAILY,
 			},
 			{
 				Id:        3,
 				UserId:    1,
 				Weight:    196,
 				EntryDate: "2025-11-03",
-				Category:  "daily",
+				Category:  CATEGORY_DAILY,
 			},
 			{
 				Id:        4,
 				UserId:    1,
 				Weight:    192,
 				EntryDate: "2025-11-04",
-				Category:  "daily",
+				Category:  CATEGORY_DAILY,
 			},
 			{
 				Id:        5,
 				UserId:    1,
 				Weight:    189,
 				EntryDate: "2025-11-05",
-				Category:  "daily",
+				Category:  CATEGORY_DAILY,
 			},
 			{
 				Id:        6,
 				UserId:    1,
 				Weight:    175,
 				EntryDate: "2025-10-01",
-				Category:  "target",
+				Category:  CATEGORY_TARGET,
 			},
 		},
 	}
@@ -62,7 +62,7 @@ func (wr *WeightRepo) GetDailyWeightEntriesForUser(userId int) ([]model.WeightEn
 	// if there is a DB error, return that error
 	weightEntries := []model.WeightEntry{}
 	for _, we := range wr.Db {
-		if we.UserId == userId && we.Category == "daily" {
+		if we.UserId == userId && we.Category == CATEGORY_DAILY {
 			weightEntries = append(weightEntries, we)
 		}
 	}
@@ -74,7 +74,7 @@ func (wr *WeightRepo) GetLatestDailyWeightForUser(userId int) (model.WeightEntry
 	var latestWeightEntry model.WeightEntry
 	maxDate := "1900-01-01"
 	for _, we := range wr.Db {
-		if we.EntryDate > maxDate && we.Category == "daily" {
+		if we.EntryDate > maxDate && we.Category == CATEGORY_DAILY {
 			latestWeightEntry = we
 		}
 	}
@@ -86,7 +86,7 @@ func (wr *WeightRepo) GetLatestTargetWeightForUser(userId int) (model.WeightEntr
 	var latestTargetWeight model.WeightEntry
 	maxDate := "1900-01-01"
 	for _, we := range wr.Db {
-		if we.EntryDate > maxDate && we.Category == "target" {
+		if we.EntryDate > maxDate && we.Category == CATEGORY_TARGET {
 			latestTargetWeight = we
 		}
 	}
