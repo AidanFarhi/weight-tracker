@@ -47,6 +47,13 @@ func NewWeightRepo() *WeightRepo {
 				EntryDate: "2025-11-05",
 				Category:  "daily",
 			},
+			{
+				Id:        6,
+				UserId:    1,
+				Weight:    175,
+				EntryDate: "2025-10-01",
+				Category:  "target",
+			},
 		},
 	}
 }
@@ -60,4 +67,28 @@ func (wr *WeightRepo) GetDailyWeightEntriesForUser(userId int) ([]model.WeightEn
 		}
 	}
 	return weightEntries, nil
+}
+
+func (wr *WeightRepo) GetLatestDailyWeightForUser(userId int) (model.WeightEntry, error) {
+	// if there is a DB error, return that error
+	var latestWeightEntry model.WeightEntry
+	maxDate := "1900-01-01"
+	for _, we := range wr.Db {
+		if we.EntryDate > maxDate && we.Category == "daily" {
+			latestWeightEntry = we
+		}
+	}
+	return latestWeightEntry, nil
+}
+
+func (wr *WeightRepo) GetLatestTargetWeightForUser(userId int) (model.WeightEntry, error) {
+	// if there is a DB error, return that error
+	var latestTargetWeight model.WeightEntry
+	maxDate := "1900-01-01"
+	for _, we := range wr.Db {
+		if we.EntryDate > maxDate && we.Category == "target" {
+			latestTargetWeight = we
+		}
+	}
+	return latestTargetWeight, nil
 }

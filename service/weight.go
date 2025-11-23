@@ -16,3 +16,11 @@ func NewWeightService(wr *repo.WeightRepo) *WeightService {
 func (ws *WeightService) GetDailyWeightEntriesForUser(userId int) ([]model.WeightEntry, error) {
 	return ws.wr.GetDailyWeightEntriesForUser(userId)
 }
+
+func (ws *WeightService) GetLatestDailyWeightEntryForUser(userId int) (model.WeightEntry, error) {
+	return ws.wr.GetLatestDailyWeightForUser(userId)
+}
+
+func (ws *WeightService) GetLatestTargetWeightForUser(userId int) (model.WeightEntry, error) {
+	return ws.wr.GetLatestTargetWeightForUser(userId)
+}

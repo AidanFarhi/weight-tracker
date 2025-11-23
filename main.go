@@ -25,7 +25,7 @@ func main() {
 	am := middleware.NewAuthMiddleware(as)
 
 	// init handlers
-	hh := handler.NewHomeHandler()
+	hh := handler.NewHomeHandler(ws)
 	ah := handler.NewAuthHandler(as)
 	rh := handler.NewRegisterHandler(rs)
 	wh := handler.NewWeightHandler(ws)
