@@ -39,23 +39,23 @@ async function fetchWeightData() {
                     x: {
                         grid: {
                             display: true,
-                            color: 'transparent',   // hides grid line color
-                            drawBorder: false,      // <-- disable the axis line at left/right
-                            drawTicks: false        // optional: don't draw ticks
+                            color: 'transparent',
+                            drawBorder: false,
+                            drawTicks: false
                         },
                         border: {
                             display: false,
                             color: 'transparent'
                         },
                         ticks: {
-                            color: '#666' // label color only
+                            color: '#666'
                         }
                     },
                     y: {
                         grid: {
                             display: true,
                             color: 'grey',
-                            drawBorder: false,      // <-- disable the y-axis border that sits at the left
+                            drawBorder: false,
                             drawTicks: true
                         },
                         border: {

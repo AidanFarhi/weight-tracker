@@ -1,0 +1,16 @@
+{{ define "daily-weight-entry" }}
+{{ template "base" . }}
+{{ end }}
+{{ define "styles"}}
+<link rel="stylesheet" href="/web/css/daily-weight-entry.css">
+{{ end }}
+{{ define "content" }}
+<div class="daily-weight-entry-main-container">
+    <form class="daily-weight-entry-form" action="/daily-weight-entry" method="post">
+        <input id="daily-weight-entry-weight-input" class="daily-weight-entry-input" type="number" name="weight">
+        <button class="daily-weight-entry-button" type="submit">Save</button>
+    </form>
+</div>
+{{ end }}
+{{ define "scripts" }}
+{{ end }}

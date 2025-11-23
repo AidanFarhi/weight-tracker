@@ -1,4 +1,4 @@
-package handler
+package controller
 
 import (
 	"net/http"
@@ -11,15 +11,15 @@ const (
 	emptyEmailOrPasswordMessage = "Please provide both email and password."
 )
 
-type AuthHandler struct {
+type AuthController struct {
 	as *service.AuthService
 }
 
-func NewAuthHandler(as *service.AuthService) *AuthHandler {
-	return &AuthHandler{as}
+func NewAuthController(as *service.AuthService) *AuthController {
+	return &AuthController{as}
 }
 
-func (ah *AuthHandler) GetLogin(w http.ResponseWriter, r *http.Request) {
+func (ac *AuthController) GetLogin(w http.ResponseWriter, r *http.Request) {
 	err := RenderPage(w, "login", model.SimplePageData{
 		HasError:     false,
 		ErrorMessage: "",
@@ -29,7 +29,7 @@ func (ah *AuthHandler) GetLogin(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ah *AuthHandler) PostLogin(w http.ResponseWriter, r *http.Request) {
+func (ac *AuthController) PostLogin(w http.ResponseWriter, r *http.Request) {
 	// get the credentials from the form
 	email := r.FormValue("email")
 	password := r.FormValue("password")
@@ -47,7 +47,7 @@ func (ah *AuthHandler) PostLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// attempt a login with login service
-	sessionId, err := ah.as.Login(email, password)
+	sessionId, err := ac.as.Login(email, password)
 
 	// check if the error is due to no records found
 	if err != nil {

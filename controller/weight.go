@@ -1,4 +1,4 @@
-package handler
+package controller
 
 import (
 	"encoding/json"
@@ -7,15 +7,15 @@ import (
 	"weight-tracker/service"
 )
 
-type WeightHandler struct {
+type WeightController struct {
 	ws *service.WeightService
 }
 
-func NewWeightHandler(ws *service.WeightService) *WeightHandler {
-	return &WeightHandler{ws}
+func NewWeightController(ws *service.WeightService) *WeightController {
+	return &WeightController{ws}
 }
 
-func (wh *WeightHandler) GetDailyWeights(w http.ResponseWriter, r *http.Request) {
+func (wh *WeightController) GetDailyWeights(w http.ResponseWriter, r *http.Request) {
 	userId, ok := r.Context().Value(middleware.UserIDKey).(int)
 	if !ok {
 		http.Redirect(w, r, "/login", http.StatusFound)

@@ -1,4 +1,4 @@
-package handler
+package controller
 
 import (
 	"net/http"
@@ -12,15 +12,15 @@ const (
 	userAlreadyExistsErrorMessage   = "A user with that email address already exists."
 )
 
-type RegisterHandler struct {
+type RegisterController struct {
 	rs *service.RegisterService
 }
 
-func NewRegisterHandler(rs *service.RegisterService) *RegisterHandler {
-	return &RegisterHandler{rs}
+func NewRegisterController(rs *service.RegisterService) *RegisterController {
+	return &RegisterController{rs}
 }
 
-func (rh *RegisterHandler) GetRegister(w http.ResponseWriter, r *http.Request) {
+func (rc *RegisterController) GetRegister(w http.ResponseWriter, r *http.Request) {
 	err := RenderPage(w, "register", model.SimplePageData{
 		HasError:     false,
 		ErrorMessage: "",
@@ -30,7 +30,7 @@ func (rh *RegisterHandler) GetRegister(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (rh *RegisterHandler) PostRegister(w http.ResponseWriter, r *http.Request) {
+func (rc *RegisterController) PostRegister(w http.ResponseWriter, r *http.Request) {
 	// get the credentials from the form
 	email := r.FormValue("register-email")
 	password := r.FormValue("register-password")
@@ -61,7 +61,7 @@ func (rh *RegisterHandler) PostRegister(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// attempt to register a user
-	sessionId, err := rh.rs.Register(email, password)
+	sessionId, err := rc.rs.Register(email, password)
 
 	if err.Error() == "user already exists" {
 		err := RenderPage(w, "register", model.SimplePageData{

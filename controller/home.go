@@ -1,4 +1,4 @@
-package handler
+package controller
 
 import (
 	"net/http"
@@ -7,26 +7,26 @@ import (
 	"weight-tracker/service"
 )
 
-type HomeHandler struct {
+type HomeController struct {
 	ws *service.WeightService
 }
 
-func NewHomeHandler(ws *service.WeightService) *HomeHandler {
-	return &HomeHandler{ws}
+func NewHomeController(ws *service.WeightService) *HomeController {
+	return &HomeController{ws}
 }
 
-func (hh *HomeHandler) GetHome(w http.ResponseWriter, r *http.Request) {
+func (hc *HomeController) GetHome(w http.ResponseWriter, r *http.Request) {
 	userId, ok := r.Context().Value(middleware.UserIDKey).(int)
 	if !ok {
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
-	latestWeightEntry, err := hh.ws.GetLatestDailyWeightEntryForUser(userId)
+	latestWeightEntry, err := hc.ws.GetLatestDailyWeightEntryForUser(userId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	latestTargetWeight, err := hh.ws.GetLatestTargetWeightForUser(userId)
+	latestTargetWeight, err := hc.ws.GetLatestTargetWeightForUser(userId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

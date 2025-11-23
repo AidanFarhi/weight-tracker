@@ -2,6 +2,8 @@
 
 This is an application to help people track their weight over time.
 
+It loosely follows the Controller-Service-Repo pattern found in most spring boot applications.
+
 ### To run locally
 
 Install air
@@ -14,7 +16,7 @@ Run air
 
 ## Package/Folder Overview
 
-`handler`
+`controller`
 
 Contains all the logic for handling/responding to requests.
 
