@@ -27,7 +27,7 @@ func (ws *WeightService) GetLatestTargetWeightForUser(userId int) (model.WeightE
 }
 
 func (ws *WeightService) CreateWeightEntry(userId int, weight int, category string, date string) error {
-	if category == repo.CATEGORY_TARGET {
+	if category == repo.CategoryTarget {
 		date = time.Now().Format("2006-01-02")
 	}
 	weightEntry := model.WeightEntry{

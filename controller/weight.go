@@ -55,7 +55,7 @@ func (wh *WeightController) PostDailyWeightEntry(w http.ResponseWriter, r *http.
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = wh.ws.CreateWeightEntry(userId, int(weight), repo.CATEGORY_DAILY, date)
+	err = wh.ws.CreateWeightEntry(userId, int(weight), repo.CategoryDaily, date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -82,7 +82,7 @@ func (wh *WeightController) PostTargetWeightEntry(w http.ResponseWriter, r *http
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = wh.ws.CreateWeightEntry(userId, int(weight), repo.CATEGORY_TARGET, "")
+	err = wh.ws.CreateWeightEntry(userId, int(weight), repo.CategoryTarget, "")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
