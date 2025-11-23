@@ -34,10 +34,20 @@
     justify-content: space-evenly;
 }
 
-.home-weight-component {
+.home-weight-component, .home-weight-sub-component {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.home-weight-component-alt {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.edit-icon {
+    margin-left: 1rem;
 }
 
 .home-weight-amount {
@@ -62,5 +72,4 @@
     height: 3rem;
     width: 3rem;
     border-radius: 50%;
-    opacity: 0.9;
 }

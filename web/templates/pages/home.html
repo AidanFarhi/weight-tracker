@@ -15,15 +15,18 @@
             <p class="home-weight-amount">179 lb</p>
             <p class="home-weight-sub-text">Current</p>
         </div>
-        <div class="home-weight-component">
-            <p class="home-weight-amount">179 lb</p>
-            <p class="home-weight-sub-text">Target</p>
-            <!-- <img class="edit-icon" src="/web/images/edit-icon.png" alt="edit icon"> -->
+        <div class="home-weight-component-alt">
+            <div class="home-weight-sub-component">
+                <p class="home-weight-amount">179 lb</p>
+                <p class="home-weight-sub-text">Target</p>
+            </div>
+            <img class="edit-icon" src="/web/images/edit-icon.png" alt="edit icon">
         </div>
     </div>
-    <!-- <p class="home-weight-chart-title">Progress</p> -->
     <canvas id="weight-chart"></canvas>
-    <img class="plus-icon" src="/web/images/plus-icon.png" alt="plus icon">
+    <a href="/daily-weight-entry">
+        <img class="plus-icon" src="/web/images/plus-icon.png" alt="plus icon">
+    </a>
 </div>
 {{ end }}
 {{ define "scripts" }}
