@@ -46,10 +46,6 @@
     align-items: center;
 }
 
-.edit-icon {
-    margin-left: 1rem;
-}
-
 .home-weight-amount {
     font-size: 1.75rem;
 }
@@ -59,6 +55,7 @@
 }
 
 .edit-icon {
+    margin-left: 1.25rem;
     height: 1.5rem;
     width: 1.5rem;
 }
