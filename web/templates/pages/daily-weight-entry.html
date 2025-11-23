@@ -8,13 +8,19 @@
 <div class="daily-weight-entry-main-container">
     <p class="daily-weight-entry-title">Enter Weight</p>
     <form class="daily-weight-entry-form" action="/daily-weight-entry" method="post">
-        <input id="daily-weight-entry-weight-input" class="daily-weight-entry-input" type="number" name="weight" autofocus>
-        <p class="daily-weight-entry-form-weight-label">lb</p>
-        <label for="date">Select a date</label><br><br>
-        <input type="date" id="date" name="date">
+        <input 
+            id="daily-weight-entry-weight-input" 
+            class="daily-weight-entry-input" 
+            type="number"
+            name="weight"
+            autofocus
+        >
+        <label class="daily-weight-date-input-label" for="date">Select a Date</label>
+        <input class="daily-weight-date-input" type="date" id="date" name="date">
         <button class="daily-weight-entry-button" type="submit">Save</button>
     </form>
 </div>
 {{ end }}
 {{ define "scripts" }}
+<script src="/web/js/daily-weight-entry.js"></script>
 {{ end }}
