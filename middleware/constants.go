@@ -2,4 +2,6 @@ package middleware
 
 type contextKey string
 
-const UserIDKey contextKey = "userID"
+const (
+	UserIDKey contextKey = "userID"
+)
