@@ -32,3 +32,10 @@ func (wh *WeightController) GetDailyWeights(w http.ResponseWriter, r *http.Reque
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
+func (wh *WeightController) GetDailyWeightEntry(w http.ResponseWriter, r *http.Request) {
+	err := RenderPage(w, "daily-weight-entry", nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}

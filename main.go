@@ -40,6 +40,7 @@ func main() {
 	mux.HandleFunc("POST /login", am.RedirectIfLoggedIn(ac.PostLogin))
 	mux.HandleFunc("GET /register", am.RedirectIfLoggedIn(rc.GetRegister))
 	mux.HandleFunc("POST /register", am.RedirectIfLoggedIn(rc.PostRegister))
+	mux.HandleFunc("GET /daily-weight-entry", am.RequireAuth(wc.GetDailyWeightEntry))
 	mux.HandleFunc("GET /api/daily-weights", am.RequireAuth(wc.GetDailyWeights))
 
 	// create server
