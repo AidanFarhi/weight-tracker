@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS user, weight_entry, session CASCADE;
+DROP TABLE IF EXISTS user_account, weight_entry, user_session CASCADE;
 
-CREATE TABLE user (
+CREATE TABLE user_account (
     id SERIAL PRIMARY KEY,
     email TEXT UNIQUE,
     password TEXT
@@ -8,13 +8,13 @@ CREATE TABLE user (
 
 CREATE TABLE weight_entry (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES user(id),
+    user_account_id INT REFERENCES user_account(id),
     weight INT,
     entry_date TEXT,
     category TEXT
 );
 
-CREATE TABLE session (
+CREATE TABLE user_session (
     id TEXT UNIQUE,
-    user_id INT REFERENCES user(id)
+    user_account_id INT REFERENCES user_account(id)
 );
