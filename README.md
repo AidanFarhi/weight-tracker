@@ -40,6 +40,10 @@ Contains all data objects.
 
 Contains html/css/js/images.
 
+`sql`
+
+Contains all SQL scripts.
+
 ## Todos
 
 - If user enters a weight for a date that already exists, it needs to update.
@@ -51,3 +55,31 @@ Contains html/css/js/images.
 - Add a line to the graph that shows the target weight.
 
 - Create the database.
+
+## Local DB setup steps (MacOS)
+
+install postgres 18
+
+`brew install postgresql@18`
+
+start postgres
+
+`brew services start postgresql@18`
+
+add postgres binaries to path
+
+`echo 'export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"' >> ~/.zshrc`
+
+apply update
+
+`source ~/.zshrc`
+
+connect to the default db
+
+`psql -d postgres`
+
+run the scripts in the sql folder in this order:
+
+`create_db_and_user.sql`
+
+`create_tables.sql`

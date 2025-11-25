@@ -1,0 +1,2 @@
+CREATE ROLE wt_user WITH LOGIN PASSWORD '<password>';
+CREATE DATABASE wt_db OWNER wt_user;
