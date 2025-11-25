@@ -2,7 +2,7 @@
 
 This is an application to help people track their weight over time.
 
-It loosely follows the Controller-Service-Repo pattern found in most spring boot applications.
+It loosely follows the Controller-Service-Repo pattern found in most Java Spring Boot applications.
 
 ### To run locally
 
@@ -10,9 +10,9 @@ Install air
 
 `go install github.com/air-verse/air@latest`
 
-Run air
+Run local Makefile command
 
-`air`
+`make local`
 
 ## Package/Folder Overview
 
