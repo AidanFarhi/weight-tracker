@@ -16,6 +16,10 @@ Run air
 
 ## Package/Folder Overview
 
+`config`
+
+Contains app config.
+
 `controller`
 
 Contains all the logic for handling/responding to requests.
