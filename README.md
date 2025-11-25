@@ -48,18 +48,6 @@ Contains html/css/js/images.
 
 Contains all SQL scripts.
 
-## Todos
-
-- If user enters a weight for a date that already exists, it needs to update.
-
-- Add constraints to the weight entry forms to not allow floating numbers.
-
-- Consider adding a grid view that lets you edit and update.
-
-- Add a line to the graph that shows the target weight.
-
-- Create the database.
-
 ## Local DB setup steps (MacOS)
 
 install postgres 18
@@ -87,3 +75,17 @@ run the scripts in the sql folder in this order:
 `create_db_and_user.sql`
 
 `create_tables.sql`
+
+## Todos
+
+- Add password hashing.
+
+- If user enters a weight for a date that already exists, it needs to update.
+
+- Add constraints to the weight entry forms to not allow floating numbers.
+
+- Consider adding a grid view that lets you edit and update.
+
+- Add a line to the graph that shows the target weight.
+
+- Create the database.
