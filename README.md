@@ -54,31 +54,29 @@ Contains all SQL scripts.
 
 ## Local DB setup steps (MacOS)
 
-install postgres 18
+Install postgres 18
 
 `brew install postgresql@18`
 
-start postgres
+Start postgres
 
 `brew services start postgresql@18`
 
-add postgres binaries to path
+Add postgres binaries to path
 
 `echo 'export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"' >> ~/.zshrc`
 
-apply update
+Apply update
 
 `source ~/.zshrc`
 
-connect to the default db
+Create the user and database
 
-`psql -d postgres`
+`psql -d postgres -f ./sql/create_db_and_user.sql`
 
-run the scripts in the sql folder in this order:
+Create the tables
 
-`create_db_and_user.sql`
-
-`create_tables.sql`
+`psql -U wt_user -d wt_db -f ./sql/create_tables.sql`
 
 ## Todos
 
