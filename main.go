@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"weight-tracker/config"
 	"weight-tracker/controller"
 	"weight-tracker/middleware"
 	"weight-tracker/repo"
@@ -10,6 +12,10 @@ import (
 )
 
 func main() {
+
+	// load config
+	c, _ := config.LoadConfig()
+	fmt.Println(c.DBURI)
 
 	// init repos
 	ur := repo.NewUserRepo()

@@ -10,6 +10,10 @@ Install air
 
 `go install github.com/air-verse/air@latest`
 
+Set environment variable to run locally
+
+`export WT_APP_ENV=local`
+
 Run local Makefile command
 
 `make local`
