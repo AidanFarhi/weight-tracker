@@ -80,7 +80,7 @@ Create the tables
 
 ## Todos
 
-- If user enters a weight for a date that already exists, it needs to update.
+- If user enters a weight for a date that already exists, it needs to update or only pull the latest for each date.
 
 - Email/password validation.
 
