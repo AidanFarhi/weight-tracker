@@ -84,13 +84,15 @@ Create the tables
 
 - If user enters a weight for a date that already exists, it needs to update.
 
+- Email/password validation.
+
+- Limit graph to one week.
+
 - Add constraints to the weight entry forms to not allow floating numbers.
 
 - Consider adding a grid view that lets you edit and update.
 
 - Add a line to the graph that shows the target weight.
-
-- Create the database.
 
 - Add a logout feature.
 
