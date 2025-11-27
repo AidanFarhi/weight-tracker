@@ -34,10 +34,20 @@ func (as *RegisterService) Register(email, password string) (string, error) {
 		return "", err
 	}
 
+	// create a session id
+	sessionId := GenerateSessionId()
+
 	// create a session with the user id using session repo
-	sessionId, err := as.sr.CreateSession(userId)
+	err = as.sr.CreateSession(sessionId, userId)
+
+	// try again if there is a duplicate session id (almost impossible)
+	if err == repo.ErrDuplicateSessionId {
+		sessionId = GenerateSessionId()
+		err = as.sr.CreateSession(sessionId, userId)
+	}
+
 	if err != nil {
-		return "", err
+		return "", ErrDBIssue
 	}
 
 	return sessionId, nil

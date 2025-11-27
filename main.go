@@ -23,10 +23,11 @@ func main() {
 	if err != nil {
 		log.Fatal("error creating DB connection pool")
 	}
+	defer pool.Close()
 
 	// init repos
 	ur := repo.NewUserRepo(pool)
-	sr := repo.NewSessionRepo()
+	sr := repo.NewSessionRepo(pool)
 	wr := repo.NewWeightRepo()
 
 	// init services

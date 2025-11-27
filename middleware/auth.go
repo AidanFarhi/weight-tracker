@@ -38,7 +38,7 @@ func (am *AuthMiddleware) RequireAuth(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		if err == service.ErrDBIssue {
-			http.Error(w, "Error validating session: "+err.Error(), http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		ctx := context.WithValue(r.Context(), UserIDKey, userId)
@@ -70,7 +70,7 @@ func (am *AuthMiddleware) RedirectIfLoggedIn(next http.HandlerFunc) http.Handler
 			return
 		}
 		if err == service.ErrDBIssue {
-			http.Error(w, "Error validating session: "+err.Error(), http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		http.Redirect(w, r, "/", http.StatusFound)

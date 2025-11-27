@@ -1,58 +1,57 @@
 package repo
 
 import (
-	"crypto/rand"
-	"encoding/hex"
+	"context"
 	"errors"
-	"weight-tracker/model"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type SessionRepo struct {
-	Db []model.Session
+	db *pgxpool.Pool
 }
 
-func NewSessionRepo() *SessionRepo {
-	return &SessionRepo{
-		Db: []model.Session{},
-	}
+func NewSessionRepo(db *pgxpool.Pool) *SessionRepo {
+	return &SessionRepo{db}
 }
 
-func (sr *SessionRepo) CreateSession(userId int) (string, error) {
-	sessionId := generateSessionId()
-	newSession := model.Session{
-		Id:     sessionId,
-		UserId: userId,
+func (sr *SessionRepo) CreateSession(sessionId string, userId int) error {
+	c := context.Background()
+	q := "INSERT INTO user_session (id, user_account_id) VALUES ($1, $2)"
+	_, err := sr.db.Exec(c, q, sessionId, userId)
+	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			if pgErr.Code == PGUniqueConstraintViolationErrorCode {
+				return ErrDuplicateSessionId
+			}
+		}
 	}
-	sr.Db = append(sr.Db, newSession)
-	return sessionId, nil
+	return err
 }
 
 func (sr *SessionRepo) DeleteSession(sessionId string) error {
-	sessionsToKeep := []model.Session{}
-	for _, s := range sr.Db {
-		if s.Id != sessionId {
-			sessionsToKeep = append(sessionsToKeep, s)
-		}
+	c := context.Background()
+	q := "DELETE FROM user_session WHERE sessionId = $1"
+	res, err := sr.db.Exec(c, q, sessionId)
+	if err != nil {
+		return err
 	}
-	if len(sessionsToKeep) == len(sr.Db) {
-		return errors.New("no session found")
+	if res.RowsAffected() == 0 {
+		return ErrNoRecordsFound
 	}
-	sr.Db = sessionsToKeep
 	return nil
 }
 
 func (sr *SessionRepo) GetUserIdForSession(sessionId string) (int, error) {
-	// TODO: throw an actual DB error if there is one while querying
-	for _, s := range sr.Db {
-		if s.Id == sessionId {
-			return s.UserId, nil
-		}
+	var userId int
+	c := context.Background()
+	q := "SELECT user_account_id FROM user_session WHERE id = $1"
+	err := sr.db.QueryRow(c, q, sessionId).Scan(&userId)
+	if err == pgx.ErrNoRows {
+		return 0, ErrNoRecordsFound
 	}
-	return -1, nil
-}
-
-func generateSessionId() string {
-	b := make([]byte, 32)
-	rand.Read(b)
-	return hex.EncodeToString(b)
+	return userId, err
 }
