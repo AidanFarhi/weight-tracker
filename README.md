@@ -91,3 +91,7 @@ Create the tables
 - Add a line to the graph that shows the target weight.
 
 - Create the database.
+
+- Add a logout feature.
+
+- Add a de-register/account delete feature.
