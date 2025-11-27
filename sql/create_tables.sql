@@ -10,7 +10,7 @@ CREATE TABLE weight_entry (
     id SERIAL PRIMARY KEY,
     user_account_id INT REFERENCES user_account(id),
     weight INT,
-    entry_date TEXT,
+    entry_date TIMESTAMP,
     category TEXT
 );
 

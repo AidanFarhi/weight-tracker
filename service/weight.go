@@ -42,13 +42,17 @@ func (ws *WeightService) GetLatestTargetWeightForUser(userId int) (model.WeightE
 }
 
 func (ws *WeightService) CreateDailyWeightEntry(userId int, weight int, date string) error {
+	parsedDate, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		return ErrDateParseIssue
+	}
 	weightEntry := model.WeightEntry{
 		UserAccountId: userId,
 		Weight:        weight,
 		Category:      CategoryDaily,
-		EntryDate:     date,
+		EntryDate:     parsedDate,
 	}
-	err := ws.wr.CreateWeightEntry(weightEntry)
+	err = ws.wr.CreateWeightEntry(weightEntry)
 	if err != nil {
 		return ErrDBIssue
 	}
@@ -60,7 +64,7 @@ func (ws *WeightService) CreateTargetWeightEntry(userId int, weight int) error {
 		UserAccountId: userId,
 		Weight:        weight,
 		Category:      CategoryTarget,
-		EntryDate:     time.Now().Format("2006-01-02"),
+		EntryDate:     time.Now(),
 	}
 	err := ws.wr.CreateWeightEntry(weightEntry)
 	if err != nil {

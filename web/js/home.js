@@ -10,8 +10,8 @@ async function fetchWeightData() {
         const sorted = rawData.sort((a, b) => new Date(a.entryDate) - new Date(b.entryDate))
         // Convert dates to MM/DD
         const labels = sorted.map(item => {
-            const d = new Date(item.entryDate + "T00:00:00")
-            return `${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getDate().toString().padStart(2, '0')}`
+            const d = new Date(item.entryDate)
+            return `${String(d.getUTCMonth() + 1).padStart(2, '0')}/${String(d.getUTCDate()).padStart(2, '0')}`
         })
         const weights = sorted.map(item => item.weight)
         const minWeight = Math.min(...weights) 
