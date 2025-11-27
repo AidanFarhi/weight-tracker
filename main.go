@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"log"
 	"net/http"
 	"weight-tracker/config"
@@ -9,16 +9,23 @@ import (
 	"weight-tracker/middleware"
 	"weight-tracker/repo"
 	"weight-tracker/service"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func main() {
 
 	// load config
 	c, _ := config.LoadConfig()
-	fmt.Println(c.DBURI)
+
+	// create db connection pool
+	pool, err := pgxpool.New(context.Background(), c.DBURI)
+	if err != nil {
+		log.Fatal("error creating DB connection pool")
+	}
 
 	// init repos
-	ur := repo.NewUserRepo()
+	ur := repo.NewUserRepo(pool)
 	sr := repo.NewSessionRepo()
 	wr := repo.NewWeightRepo()
 

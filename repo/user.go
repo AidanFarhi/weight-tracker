@@ -1,55 +1,48 @@
 package repo
 
 import (
-	"weight-tracker/model"
+	"context"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type UserRepo struct {
-	Db            []model.User
-	userIdCounter int
+	db *pgxpool.Pool
 }
 
-func NewUserRepo() *UserRepo {
-	// create a simple in-memory db for now
-	return &UserRepo{
-		userIdCounter: 2,
-		Db: []model.User{
-			{
-				Id:       1,
-				Email:    "wert",
-				Password: "wert",
-			},
-		},
-	}
+func NewUserRepo(db *pgxpool.Pool) *UserRepo {
+	return &UserRepo{db}
 }
 
 func (ur *UserRepo) CreateUser(email, password string) (int, error) {
-	newUser := model.User{
-		Id:       ur.userIdCounter,
-		Email:    email,
-		Password: password,
+	var userId int
+	c := context.Background()
+	q := "INSERT INTO user_account (email, password) VALUES ($1, $2) RETURNING id"
+	err := ur.db.QueryRow(c, q, email, password).Scan(&userId)
+	if err != nil {
+		return -1, err
 	}
-	ur.Db = append(ur.Db, newUser)
-	ur.userIdCounter = ur.userIdCounter + 1
-	return newUser.Id, nil
+	return userId, nil
 }
 
-// TODO: change the return to only throw an error if there is a SQL DB error.
-// otherwise, it should be a boolean?
-func (ur *UserRepo) CheckIfUserExists(email string) error {
-	for _, u := range ur.Db {
-		if u.Email == email {
-			return nil
-		}
+func (ur *UserRepo) CheckIfUserExists(email string) (bool, error) {
+	var userExists bool
+	c := context.Background()
+	q := "SELECT EXISTS(SELECT 1 FROM user_account WHERE email = $1)"
+	err := ur.db.QueryRow(c, q, email).Scan(&userExists)
+	if err != nil {
+		return false, err
 	}
-	return ErrUserNotFound
+	return userExists, nil
 }
 
 func (ur *UserRepo) GetIdForUser(email, password string) (int, error) {
-	for _, u := range ur.Db {
-		if u.Email == email && u.Password == password {
-			return u.Id, nil
-		}
+	var userId int
+	c := context.Background()
+	q := "SELECT id FROM user_account WHERE email = $1 AND password = $2"
+	err := ur.db.QueryRow(c, q, email, password).Scan(&userId)
+	if err != nil {
+		return -1, err
 	}
-	return -1, ErrUserNotFound
+	return userId, nil
 }

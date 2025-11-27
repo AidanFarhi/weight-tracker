@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"weight-tracker/repo"
 )
 
@@ -18,16 +17,21 @@ func NewRegisterService(ur *repo.UserRepo, sr *repo.SessionRepo) *RegisterServic
 }
 
 func (as *RegisterService) Register(email, password string) (string, error) {
-	// check if user already exists
-	err := as.ur.CheckIfUserExists(email)
-	if err == nil {
-		return "", errors.New("user already exists")
+	userExists, err := as.ur.CheckIfUserExists(email)
+
+	if err != nil {
+		return "", err
+	}
+
+	if userExists {
+		return "", ErrUserAlreadyExists
 	}
 
 	// create a user
+	// TODO: hash the password using secure crypto stuff
 	userId, err := as.ur.CreateUser(email, password)
 	if err != nil {
-		return "", errors.New("error creating user")
+		return "", err
 	}
 
 	// create a session with the user id using session repo

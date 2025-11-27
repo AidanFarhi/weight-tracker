@@ -57,7 +57,8 @@ func (rc *RegisterController) PostRegister(w http.ResponseWriter, r *http.Reques
 	// attempt to register a user
 	sessionId, err := rc.rs.Register(email, password)
 
-	if err.Error() == "user already exists" {
+	// if user already exists, show an error message
+	if err == service.ErrUserAlreadyExists {
 		err := RenderPage(w, "register", model.SimplePageData{
 			HasError:     true,
 			ErrorMessage: UserAlreadyExistsErrorMessage,
