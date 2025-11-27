@@ -18,37 +18,28 @@ func NewRegisterService(ur *repo.UserRepo, sr *repo.SessionRepo) *RegisterServic
 
 func (as *RegisterService) Register(email, password string) (string, error) {
 	userExists, err := as.ur.CheckIfUserExists(email)
-
 	if err != nil {
-		return "", err
+		return "", ErrDBIssue
 	}
-
 	if userExists {
 		return "", ErrUserAlreadyExists
 	}
-
-	// create a user
-	// TODO: hash the password using secure crypto stuff
-	userId, err := as.ur.CreateUser(email, password)
+	hashedPassword, err := HashPassword(password)
 	if err != nil {
-		return "", err
+		return "", ErrHashingIssue
 	}
-
-	// create a session id
+	userId, err := as.ur.CreateUser(email, hashedPassword)
+	if err != nil {
+		return "", ErrDBIssue
+	}
 	sessionId := GenerateSessionId()
-
-	// create a session with the user id using session repo
 	err = as.sr.CreateSession(sessionId, userId)
-
-	// try again if there is a duplicate session id (almost impossible)
 	if err == repo.ErrDuplicateSessionId {
 		sessionId = GenerateSessionId()
 		err = as.sr.CreateSession(sessionId, userId)
 	}
-
 	if err != nil {
 		return "", ErrDBIssue
 	}
-
 	return sessionId, nil
 }

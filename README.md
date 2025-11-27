@@ -80,8 +80,6 @@ Create the tables
 
 ## Todos
 
-- Add password hashing.
-
 - If user enters a weight for a date that already exists, it needs to update.
 
 - Email/password validation.

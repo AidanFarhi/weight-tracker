@@ -2,7 +2,9 @@ package repo
 
 import (
 	"context"
+	"weight-tracker/model"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -20,7 +22,7 @@ func (ur *UserRepo) CreateUser(email, password string) (int, error) {
 	q := "INSERT INTO user_account (email, password) VALUES ($1, $2) RETURNING id"
 	err := ur.db.QueryRow(c, q, email, password).Scan(&userId)
 	if err != nil {
-		return -1, err
+		return 0, ErrSQLDBIssue
 	}
 	return userId, nil
 }
@@ -31,18 +33,21 @@ func (ur *UserRepo) CheckIfUserExists(email string) (bool, error) {
 	q := "SELECT EXISTS(SELECT 1 FROM user_account WHERE email = $1)"
 	err := ur.db.QueryRow(c, q, email).Scan(&userExists)
 	if err != nil {
-		return false, err
+		return false, ErrSQLDBIssue
 	}
 	return userExists, nil
 }
 
-func (ur *UserRepo) GetIdForUser(email, password string) (int, error) {
-	var userId int
+func (ur *UserRepo) GetUserByEmail(email string) (model.User, error) {
+	var user model.User
 	c := context.Background()
-	q := "SELECT id FROM user_account WHERE email = $1 AND password = $2"
-	err := ur.db.QueryRow(c, q, email, password).Scan(&userId)
+	q := "SELECT id, password FROM user_account WHERE email = $1"
+	err := ur.db.QueryRow(c, q, email).Scan(&user.Id, &user.Password)
 	if err != nil {
-		return -1, err
+		if err == pgx.ErrNoRows {
+			return user, ErrNoRecordsFound
+		}
+		return user, ErrSQLDBIssue
 	}
-	return userId, nil
+	return user, nil
 }

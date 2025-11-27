@@ -25,11 +25,8 @@ func (ac *AuthController) GetLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ac *AuthController) PostLogin(w http.ResponseWriter, r *http.Request) {
-	// get the credentials from the form
 	email := r.FormValue("email")
 	password := r.FormValue("password")
-
-	// check if credentials are missing
 	if email == "" || password == "" {
 		err := RenderPage(w, "login", model.SimplePageData{
 			HasError:     true,
@@ -40,22 +37,19 @@ func (ac *AuthController) PostLogin(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
-	// attempt a login with login service
 	sessionId, err := ac.as.Login(email, password)
-
-	// check if the error is due to no records found
-	if err != nil {
-		err := RenderPage(w, "login", model.SimplePageData{
+	if err == service.ErrEmailNotFound || err == service.ErrIncorrectPassword {
+		err = RenderPage(w, "login", model.SimplePageData{
 			HasError:     true,
 			ErrorMessage: InvalidCredentialsMessage,
 		})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
+	}
+	if err != nil {
 		return
 	}
-
 	// store session id in cookie
 	cookie := &http.Cookie{
 		Name:     "session_id",

@@ -28,8 +28,9 @@ func (sr *SessionRepo) CreateSession(sessionId string, userId int) error {
 				return ErrDuplicateSessionId
 			}
 		}
+		return ErrSQLDBIssue
 	}
-	return err
+	return nil
 }
 
 func (sr *SessionRepo) DeleteSession(sessionId string) error {
@@ -37,7 +38,7 @@ func (sr *SessionRepo) DeleteSession(sessionId string) error {
 	q := "DELETE FROM user_session WHERE sessionId = $1"
 	res, err := sr.db.Exec(c, q, sessionId)
 	if err != nil {
-		return err
+		return ErrSQLDBIssue
 	}
 	if res.RowsAffected() == 0 {
 		return ErrNoRecordsFound
@@ -50,8 +51,11 @@ func (sr *SessionRepo) GetUserIdForSession(sessionId string) (int, error) {
 	c := context.Background()
 	q := "SELECT user_account_id FROM user_session WHERE id = $1"
 	err := sr.db.QueryRow(c, q, sessionId).Scan(&userId)
-	if err == pgx.ErrNoRows {
-		return 0, ErrNoRecordsFound
+	if err != nil {
+		if err != pgx.ErrNoRows {
+			return 0, ErrNoRecordsFound
+		}
+		return 0, ErrSQLDBIssue
 	}
-	return userId, err
+	return userId, nil
 }

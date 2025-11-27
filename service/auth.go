@@ -17,26 +17,28 @@ func NewAuthService(ur *repo.UserRepo, sr *repo.SessionRepo) *AuthService {
 }
 
 func (as *AuthService) Login(email, password string) (string, error) {
-	// check user credentials
-	userId, err := as.ur.GetIdForUser(email, password)
-	if err != nil {
-		return "", err
+	user, err := as.ur.GetUserByEmail(email)
+	if err == repo.ErrNoRecordsFound {
+		return "", ErrEmailNotFound
 	}
-
-	// create a session
-	sessionId := GenerateSessionId()
-	err = as.sr.CreateSession(sessionId, userId)
-
-	// try again if there is a duplicate session id (almost impossible)
-	if err == repo.ErrDuplicateSessionId {
-		sessionId = GenerateSessionId()
-		err = as.sr.CreateSession(sessionId, userId)
-	}
-
 	if err != nil {
 		return "", ErrDBIssue
 	}
-
+	passwordValid := VerifyPassword(password, user.Password)
+	if !passwordValid {
+		return "", ErrIncorrectPassword
+	}
+	// create a session
+	sessionId := GenerateSessionId()
+	err = as.sr.CreateSession(sessionId, user.Id)
+	// try again if there is a duplicate session id (almost impossible)
+	if err == repo.ErrDuplicateSessionId {
+		sessionId = GenerateSessionId()
+		err = as.sr.CreateSession(sessionId, user.Id)
+	}
+	if err != nil {
+		return "", ErrDBIssue
+	}
 	// return newly created session id
 	return sessionId, nil
 }
