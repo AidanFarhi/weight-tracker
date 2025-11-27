@@ -1,100 +1,92 @@
 package repo
 
 import (
+	"context"
+	"fmt"
 	"weight-tracker/model"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type WeightRepo struct {
-	Db []model.WeightEntry
+	db *pgxpool.Pool
 }
 
-func NewWeightRepo() *WeightRepo {
-	// in memory-db for now
-	return &WeightRepo{
-		Db: []model.WeightEntry{
-			{
-				Id:        1,
-				UserId:    1,
-				Weight:    198,
-				EntryDate: "2025-11-01",
-				Category:  CategoryDaily,
-			},
-			{
-				Id:        2,
-				UserId:    1,
-				Weight:    195,
-				EntryDate: "2025-11-02",
-				Category:  CategoryDaily,
-			},
-			{
-				Id:        3,
-				UserId:    1,
-				Weight:    196,
-				EntryDate: "2025-11-03",
-				Category:  CategoryDaily,
-			},
-			{
-				Id:        4,
-				UserId:    1,
-				Weight:    192,
-				EntryDate: "2025-11-04",
-				Category:  CategoryDaily,
-			},
-			{
-				Id:        5,
-				UserId:    1,
-				Weight:    189,
-				EntryDate: "2025-11-05",
-				Category:  CategoryDaily,
-			},
-			{
-				Id:        6,
-				UserId:    1,
-				Weight:    175,
-				EntryDate: "2025-10-01",
-				Category:  CategoryTarget,
-			},
-		},
+func NewWeightRepo(db *pgxpool.Pool) *WeightRepo {
+	return &WeightRepo{db}
+}
+
+func (wr *WeightRepo) GetWeightEntriesForUser(userId int, category string) ([]model.WeightEntry, error) {
+	var weightEntries []model.WeightEntry
+	c := context.Background()
+	q := `
+		SELECT id, user_account_id, weight, entry_date, category
+		FROM weight_entry
+		WHERE user_account_id = $1 AND category = $2
+	`
+	rows, err := wr.db.Query(c, q, userId, category)
+	if err != nil {
+		fmt.Println("GetWeightEntriesForUser: line 30: ", err)
+		return weightEntries, ErrSQLDBIssue
 	}
-}
-
-func (wr *WeightRepo) GetDailyWeightEntriesForUser(userId int) ([]model.WeightEntry, error) {
-	// if there is a DB error, return that error
-	weightEntries := []model.WeightEntry{}
-	for _, we := range wr.Db {
-		if we.UserId == userId && we.Category == CategoryDaily {
-			weightEntries = append(weightEntries, we)
+	defer rows.Close()
+	for rows.Next() {
+		var we model.WeightEntry
+		err := rows.Scan(
+			&we.Id,
+			&we.UserAccountId,
+			&we.Weight,
+			&we.EntryDate,
+			&we.Category,
+		)
+		if err != nil {
+			return weightEntries, ErrSQLDBIssue
 		}
+		weightEntries = append(weightEntries, we)
 	}
 	return weightEntries, nil
 }
 
-func (wr *WeightRepo) GetLatestDailyWeightForUser(userId int) (model.WeightEntry, error) {
-	// if there is a DB error, return that error
+func (wr *WeightRepo) GetLatestWeightEntryForUser(userId int, category string) (model.WeightEntry, error) {
 	var latestWeightEntry model.WeightEntry
-	maxDate := "1900-01-01"
-	for _, we := range wr.Db {
-		if we.EntryDate > maxDate && we.Category == CategoryDaily {
-			latestWeightEntry = we
-		}
+	c := context.Background()
+	q := `
+		SELECT id, user_account_id, weight, entry_date, category
+		FROM weight_entry
+		WHERE user_account_id = $1 AND category = $2
+		ORDER BY entry_date DESC
+		LIMIT 1
+	`
+	err := wr.db.QueryRow(c, q, userId, category).Scan(
+		&latestWeightEntry.Id,
+		&latestWeightEntry.UserAccountId,
+		&latestWeightEntry.Weight,
+		&latestWeightEntry.EntryDate,
+		&latestWeightEntry.Category,
+	)
+	if err != nil && err != pgx.ErrNoRows {
+		return latestWeightEntry, ErrSQLDBIssue
 	}
 	return latestWeightEntry, nil
 }
 
-func (wr *WeightRepo) GetLatestTargetWeightForUser(userId int) (model.WeightEntry, error) {
-	// if there is a DB error, return that error
-	var latestTargetWeight model.WeightEntry
-	maxDate := "1900-01-01"
-	for _, we := range wr.Db {
-		if we.EntryDate > maxDate && we.Category == CategoryTarget {
-			latestTargetWeight = we
-		}
-	}
-	return latestTargetWeight, nil
-}
-
 func (wr *WeightRepo) CreateWeightEntry(weightEntry model.WeightEntry) error {
-	weightEntry.Id = 1 // hardcode as one for now
-	wr.Db = append(wr.Db, weightEntry)
+	c := context.Background()
+	q := `
+		INSERT INTO weight_entry (user_account_id, weight, entry_date, category)
+		VALUES ($1, $2, $3, $4)
+	`
+	_, err := wr.db.Exec(
+		c,
+		q,
+		weightEntry.UserAccountId,
+		weightEntry.Weight,
+		weightEntry.EntryDate,
+		weightEntry.Category,
+	)
+	if err != nil {
+		return ErrSQLDBIssue
+	}
 	return nil
 }

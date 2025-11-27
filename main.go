@@ -28,7 +28,7 @@ func main() {
 	// init repos
 	ur := repo.NewUserRepo(pool)
 	sr := repo.NewSessionRepo(pool)
-	wr := repo.NewWeightRepo()
+	wr := repo.NewWeightRepo(pool)
 
 	// init services
 	as := service.NewAuthService(ur, sr)

@@ -101,3 +101,5 @@ Create the tables
 - Add a prompt when the user first logs in and there is no target weight set.
 
 - Make it look good on desktop.
+
+- Unit testing???

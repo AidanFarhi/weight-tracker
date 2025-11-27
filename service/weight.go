@@ -15,26 +15,56 @@ func NewWeightService(wr *repo.WeightRepo) *WeightService {
 }
 
 func (ws *WeightService) GetDailyWeightEntriesForUser(userId int) ([]model.WeightEntry, error) {
-	return ws.wr.GetDailyWeightEntriesForUser(userId)
+	var weightEntries []model.WeightEntry
+	weightEntries, err := ws.wr.GetWeightEntriesForUser(userId, CategoryDaily)
+	if err != nil {
+		return weightEntries, ErrDBIssue
+	}
+	return weightEntries, nil
 }
 
 func (ws *WeightService) GetLatestDailyWeightEntryForUser(userId int) (model.WeightEntry, error) {
-	return ws.wr.GetLatestDailyWeightForUser(userId)
+	var weightEntry model.WeightEntry
+	weightEntry, err := ws.wr.GetLatestWeightEntryForUser(userId, CategoryDaily)
+	if err != nil {
+		return weightEntry, ErrDBIssue
+	}
+	return weightEntry, nil
 }
 
 func (ws *WeightService) GetLatestTargetWeightForUser(userId int) (model.WeightEntry, error) {
-	return ws.wr.GetLatestTargetWeightForUser(userId)
+	var weightEntry model.WeightEntry
+	weightEntry, err := ws.wr.GetLatestWeightEntryForUser(userId, CategoryTarget)
+	if err != nil {
+		return weightEntry, ErrDBIssue
+	}
+	return weightEntry, nil
 }
 
-func (ws *WeightService) CreateWeightEntry(userId int, weight int, category string, date string) error {
-	if category == repo.CategoryTarget {
-		date = time.Now().Format("2006-01-02")
-	}
+func (ws *WeightService) CreateDailyWeightEntry(userId int, weight int, date string) error {
 	weightEntry := model.WeightEntry{
-		UserId:    userId,
-		Weight:    weight,
-		Category:  category,
-		EntryDate: date,
+		UserAccountId: userId,
+		Weight:        weight,
+		Category:      CategoryDaily,
+		EntryDate:     date,
 	}
-	return ws.wr.CreateWeightEntry(weightEntry)
+	err := ws.wr.CreateWeightEntry(weightEntry)
+	if err != nil {
+		return ErrDBIssue
+	}
+	return nil
+}
+
+func (ws *WeightService) CreateTargetWeightEntry(userId int, weight int) error {
+	weightEntry := model.WeightEntry{
+		UserAccountId: userId,
+		Weight:        weight,
+		Category:      CategoryTarget,
+		EntryDate:     time.Now().Format("2006-01-02"),
+	}
+	err := ws.wr.CreateWeightEntry(weightEntry)
+	if err != nil {
+		return ErrDBIssue
+	}
+	return nil
 }

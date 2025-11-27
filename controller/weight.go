@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 	"weight-tracker/middleware"
-	"weight-tracker/repo"
 	"weight-tracker/service"
 )
 
@@ -55,7 +54,7 @@ func (wh *WeightController) PostDailyWeightEntry(w http.ResponseWriter, r *http.
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = wh.ws.CreateWeightEntry(userId, int(weight), repo.CategoryDaily, date)
+	err = wh.ws.CreateDailyWeightEntry(userId, int(weight), date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -82,7 +81,7 @@ func (wh *WeightController) PostTargetWeightEntry(w http.ResponseWriter, r *http
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = wh.ws.CreateWeightEntry(userId, int(weight), repo.CategoryTarget, "")
+	err = wh.ws.CreateTargetWeightEntry(userId, int(weight))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
