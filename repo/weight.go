@@ -2,7 +2,6 @@ package repo
 
 import (
 	"context"
-	"fmt"
 	"weight-tracker/model"
 
 	"github.com/jackc/pgx/v5"
@@ -27,7 +26,6 @@ func (wr *WeightRepo) GetWeightEntriesForUser(userId int, category string) ([]mo
 	`
 	rows, err := wr.db.Query(c, q, userId, category)
 	if err != nil {
-		fmt.Println("GetWeightEntriesForUser: line 30: ", err)
 		return weightEntries, ErrSQLDBIssue
 	}
 	defer rows.Close()
