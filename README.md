@@ -80,24 +80,22 @@ Create the tables
 
 ## Todos
 
-- If user enters a weight for a date that already exists, it needs to update or only pull the latest for each date.
+- Email/password validation. [ ]
 
-- Email/password validation.
+- Add constraints to the weight entry forms to not allow floating numbers. [ ]
 
-- Add constraints to the weight entry forms to not allow floating numbers.
+- Consider adding a grid view that lets you edit and update. [ ]
 
-- Consider adding a grid view that lets you edit and update.
+- Add a line to the graph that shows the target weight. [ ]
 
-- Add a line to the graph that shows the target weight.
+- Add a logout feature. [ ]
 
-- Add a logout feature.
+- Add a de-register/account delete feature. [ ]
 
-- Add a de-register/account delete feature.
+- Add placeholder values for missing weight data. [ ]
 
-- Add placeholder values for missing weight data.
+- Add a prompt when the user first logs in and there is no target weight set. [ ]
 
-- Add a prompt when the user first logs in and there is no target weight set.
+- Make it look good on desktop. [ ]
 
-- Make it look good on desktop.
-
-- Unit testing???
+- Unit testing??? [ ]

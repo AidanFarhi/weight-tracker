@@ -16,6 +16,7 @@ async function fetchWeightData() {
         const weights = sorted.map(item => item.weight)
         const minWeight = Math.min(...weights) 
         const maxWeight = Math.max(...weights)
+        const targetWeight = 140
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -34,7 +35,26 @@ async function fetchWeightData() {
             options: {
                 borderColor: 'transparent',
                 plugins: {
-                    legend: { display: false }
+                    legend: { display: false },
+                    annotation: {
+                        annotations: {
+                            targetLine: {
+                                type: 'line',
+                                yMin: targetWeight, // the target weight
+                                yMax: targetWeight,
+                                borderColor: 'red',
+                                borderWidth: 2,
+                                borderDash: [6, 6],
+                                label: {
+                                    content: 'Target',
+                                    enabled: true,
+                                    position: 'start',
+                                    backgroundColor: 'red',
+                                    color: 'white',
+                                }
+                            }
+                        }
+                    }
                 },
                 scales: {
                     x: {
