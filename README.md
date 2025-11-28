@@ -4,20 +4,6 @@ This is an application to help people track their weight over time.
 
 It loosely follows the Controller-Service-Repo pattern found in most Java Spring Boot applications.
 
-### To run locally
-
-Install air
-
-`go install github.com/air-verse/air@latest`
-
-Set environment variable to run locally
-
-`export WT_APP_ENV=local`
-
-Run local Makefile command
-
-`make local`
-
 ## Package/Folder Overview
 
 `config`
@@ -78,9 +64,21 @@ Create the tables
 
 `psql -U wt_user -d wt_db -f ./sql/create_tables.sql`
 
-## Todos
+## To run app locally
 
-- Email/password validation. [ ]
+Install air
+
+`go install github.com/air-verse/air@latest`
+
+Set environment variable to run locally
+
+`export WT_APP_ENV=local`
+
+Run local Makefile command
+
+`make local`
+
+## Todos
 
 - Add constraints to the weight entry forms to not allow floating numbers. [ ]
 
