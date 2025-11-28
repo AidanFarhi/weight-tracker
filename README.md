@@ -84,18 +84,14 @@ Create the tables
 
 - Add constraints to the weight entry forms to not allow floating numbers. [ ]
 
-- Consider adding a grid view that lets you edit and update. [ ]
-
-- Add a line to the graph that shows the target weight. [ ]
-
 - Add a logout feature. [ ]
 
-- Add a de-register/account delete feature. [ ]
+- Grid view that lets you edit and update. [ ]
 
 - Add placeholder values for missing weight data. [ ]
-
-- Add a prompt when the user first logs in and there is no target weight set. [ ]
 
 - Make it look good on desktop. [ ]
 
 - Unit testing??? [ ]
+
+- Add a prompt when the user first logs in and there is no target weight set. [ ]
