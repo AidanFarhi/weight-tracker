@@ -40,7 +40,7 @@ async function fetchWeightData() {
                         annotations: {
                             targetLine: {
                                 type: 'line',
-                                yMin: targetWeight, // the target weight
+                                yMin: targetWeight,
                                 yMax: targetWeight,
                                 borderColor: 'red',
                                 borderWidth: 2,
