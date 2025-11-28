@@ -84,8 +84,6 @@ Create the tables
 
 - Email/password validation.
 
-- Limit graph to one week.
-
 - Add constraints to the weight entry forms to not allow floating numbers.
 
 - Consider adding a grid view that lets you edit and update.

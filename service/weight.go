@@ -50,11 +50,22 @@ func (ws *WeightService) CreateDailyWeightEntry(userId int, weight int, date str
 	if err != nil {
 		return ErrDateParseIssue
 	}
+	now := time.Now()
+	entryDate := time.Date(
+		parsedDate.Year(),
+		parsedDate.Month(),
+		parsedDate.Day(),
+		now.Hour(),
+		now.Minute(),
+		now.Second(),
+		now.Nanosecond(),
+		time.Local,
+	)
 	weightEntry := model.WeightEntry{
 		UserAccountId: userId,
 		Weight:        weight,
 		Category:      CategoryDaily,
-		EntryDate:     parsedDate,
+		EntryDate:     entryDate,
 	}
 	err = ws.wr.CreateWeightEntry(weightEntry)
 	if err != nil {

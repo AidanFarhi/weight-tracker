@@ -20,9 +20,22 @@ func (wr *WeightRepo) GetNWeightEntriesByUserId(userId int, category string, n i
 	var weightEntries []model.WeightEntry
 	c := context.Background()
 	q := `
+		WITH weight_entries_ranked AS (
+			SELECT
+				id,
+				user_account_id,
+				weight,
+				entry_date,
+				category,
+				ROW_NUMBER() OVER(PARTITION BY entry_date::date ORDER BY entry_date DESC) AS rnk
+			FROM 
+				weight_entry
+			WHERE 
+				user_account_id = $1 AND category = $2
+		)
 		SELECT id, user_account_id, weight, entry_date, category
-		FROM weight_entry
-		WHERE user_account_id = $1 AND category = $2
+		FROM weight_entries_ranked
+		WHERE rnk = 1
 		ORDER BY entry_date DESC
 		LIMIT $3
 	`
