@@ -2,7 +2,7 @@ const ctx = document.getElementById('weight-chart')
 
 async function fetchWeightData() {
     try {
-        const response = await fetch('/api/daily-weights')
+        const response = await fetch('/api/daily-weight-entries?n=7')
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`)
         }

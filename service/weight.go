@@ -14,9 +14,13 @@ func NewWeightService(wr *repo.WeightRepo) *WeightService {
 	return &WeightService{wr}
 }
 
-func (ws *WeightService) GetDailyWeightEntriesForUser(userId int) ([]model.WeightEntry, error) {
+func (ws *WeightService) GetNDailyWeightEntriesByUserId(userId, n int) ([]model.WeightEntry, error) {
 	var weightEntries []model.WeightEntry
-	weightEntries, err := ws.wr.GetWeightEntriesForUser(userId, CategoryDaily)
+	// figure out a better way?
+	if n <= 0 {
+		n = 100_000
+	}
+	weightEntries, err := ws.wr.GetNWeightEntriesByUserId(userId, CategoryDaily, n)
 	if err != nil {
 		return weightEntries, ErrDBIssue
 	}

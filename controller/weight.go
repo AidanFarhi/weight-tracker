@@ -16,13 +16,23 @@ func NewWeightController(ws *service.WeightService) *WeightController {
 	return &WeightController{ws}
 }
 
-func (wh *WeightController) GetDailyWeights(w http.ResponseWriter, r *http.Request) {
+func (wh *WeightController) GetDailyWeightEntries(w http.ResponseWriter, r *http.Request) {
 	userId, ok := r.Context().Value(middleware.UserIDKey).(int)
 	if !ok {
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
-	weightEntries, err := wh.ws.GetDailyWeightEntriesForUser(userId)
+	var n int
+	nParam := r.URL.Query().Get("n")
+	if nParam != "" {
+		var err error
+		n, err = strconv.Atoi(nParam)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	weightEntries, err := wh.ws.GetNDailyWeightEntriesByUserId(userId, n)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
