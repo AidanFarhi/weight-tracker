@@ -2,12 +2,17 @@ const ctx = document.getElementById('weight-chart')
 
 async function fetchWeightData() {
     try {
-        const response = await fetch('/api/daily-weight-entries?n=7')
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
+        const weightEntriesResponse = await fetch('/api/daily-weight-entries?n=7')
+        if (!weightEntriesResponse.ok) {
+            throw new Error(`HTTP error! status: ${weightEntriesResponse.status}`)
         }
-        const rawData = await response.json()
-        const sorted = rawData.sort((a, b) => new Date(a.entryDate) - new Date(b.entryDate))
+        const weightEntriesJSON = await weightEntriesResponse.json()
+        const targetWeightEntryResponse = await fetch('/api/target-weight')
+        if (!targetWeightEntryResponse.ok) {
+            throw new Error(`HTTP error! status: ${targetWeightEntryResponse.status}`)
+        }
+        const targetWeightEntryJSON = await targetWeightEntryResponse.json()
+        const sorted = weightEntriesJSON.sort((a, b) => new Date(a.entryDate) - new Date(b.entryDate))
         // Convert dates to MM/DD
         const labels = sorted.map(item => {
             const d = new Date(item.entryDate)
@@ -16,7 +21,7 @@ async function fetchWeightData() {
         const weights = sorted.map(item => item.weight)
         const minWeight = Math.min(...weights) 
         const maxWeight = Math.max(...weights)
-        const targetWeight = 140
+        const targetWeight = targetWeightEntryJSON.weight
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -79,7 +84,7 @@ async function fetchWeightData() {
                             drawBorder: false,
                             drawTicks: true
                         },
-                        suggestedMin: minWeight - 5,
+                        suggestedMin: Math.min(minWeight, targetWeight) - 5,
                         suggestedMax: maxWeight + 5,
                         border: {
                             display: false,

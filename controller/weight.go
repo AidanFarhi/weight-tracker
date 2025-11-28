@@ -44,6 +44,24 @@ func (wh *WeightController) GetDailyWeightEntries(w http.ResponseWriter, r *http
 	}
 }
 
+func (wh *WeightController) GetTargetWeight(w http.ResponseWriter, r *http.Request) {
+	userId, ok := r.Context().Value(middleware.UserIDKey).(int)
+	if !ok {
+		http.Redirect(w, r, "/login", http.StatusFound)
+		return
+	}
+	targetWeightEntry, err := wh.ws.GetLatestTargetWeightForUser(userId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("content-type", "application/json")
+	err = json.NewEncoder(w).Encode(targetWeightEntry)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
 func (wh *WeightController) GetDailyWeightEntry(w http.ResponseWriter, r *http.Request) {
 	err := RenderPage(w, "daily-weight-entry", nil)
 	if err != nil {
