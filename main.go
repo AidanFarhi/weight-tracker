@@ -16,7 +16,10 @@ import (
 func main() {
 
 	// load config
-	c, _ := config.LoadConfig()
+	c, err := config.LoadConfig()
+	if err != nil {
+		log.Fatal("error loading config")
+	}
 
 	// create db connection pool
 	pool, err := pgxpool.New(context.Background(), c.DBURI)
@@ -47,8 +50,10 @@ func main() {
 	// create multiplexer
 	mux := http.NewServeMux()
 
-	// register routes with multiplexer
+	// static file server
 	mux.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("web"))))
+
+	// routes for pages
 	mux.HandleFunc("/", am.RequireAuth(hc.GetHome))
 	mux.HandleFunc("GET /login", am.RedirectIfLoggedIn(ac.GetLogin))
 	mux.HandleFunc("POST /login", am.RedirectIfLoggedIn(ac.PostLogin))
@@ -58,6 +63,8 @@ func main() {
 	mux.HandleFunc("POST /daily-weight-entry", am.RequireAuth(wc.PostDailyWeightEntry))
 	mux.HandleFunc("GET /target-weight-entry", am.RequireAuth(wc.GetTargetWeightEntry))
 	mux.HandleFunc("POST /target-weight-entry", am.RequireAuth(wc.PostTargetWeightEntry))
+
+	// routes for JSON APIs
 	mux.HandleFunc("GET /api/daily-weight-entries", am.RequireAuth(wc.GetDailyWeightEntries))
 	mux.HandleFunc("GET /api/target-weight", am.RequireAuth(wc.GetTargetWeight))
 
