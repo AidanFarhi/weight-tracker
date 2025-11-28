@@ -29,7 +29,6 @@ func (rc *RegisterController) PostRegister(w http.ResponseWriter, r *http.Reques
 	email := r.FormValue("register-email")
 	password := r.FormValue("register-password")
 	passwordRepeat := r.FormValue("register-password-repeat")
-
 	// check if credentials are missing
 	if email == "" || password == "" || passwordRepeat == "" {
 		err := RenderPage(w, "register", model.SimplePageData{
@@ -41,7 +40,30 @@ func (rc *RegisterController) PostRegister(w http.ResponseWriter, r *http.Reques
 		}
 		return
 	}
-
+	// check if email is valid
+	emailValid := IsValidEmail(email)
+	if !emailValid {
+		err := RenderPage(w, "register", model.SimplePageData{
+			HasError:     true,
+			ErrorMessage: InvalidEmailMessage,
+		})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+	// check if password is valid
+	passwordValid := IsValidPassword(password)
+	if !passwordValid {
+		err := RenderPage(w, "register", model.SimplePageData{
+			HasError:     true,
+			ErrorMessage: InvalidPasswordMessage,
+		})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
 	// check if passwords match
 	if password != passwordRepeat {
 		err := RenderPage(w, "register", model.SimplePageData{
@@ -53,10 +75,8 @@ func (rc *RegisterController) PostRegister(w http.ResponseWriter, r *http.Reques
 		}
 		return
 	}
-
 	// attempt to register a user
 	sessionId, err := rc.rs.Register(email, password)
-
 	// if user already exists, show an error message
 	if err == service.ErrUserAlreadyExists {
 		err := RenderPage(w, "register", model.SimplePageData{
@@ -68,13 +88,11 @@ func (rc *RegisterController) PostRegister(w http.ResponseWriter, r *http.Reques
 		}
 		return
 	}
-
 	// some other error occured
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	// store session id in cookie
 	cookie := &http.Cookie{
 		Name:     "session_id",
@@ -86,7 +104,6 @@ func (rc *RegisterController) PostRegister(w http.ResponseWriter, r *http.Reques
 		// Expires:  time.Now().Add(24 * time.Hour),
 	}
 	http.SetCookie(w, cookie)
-
 	// redirect to home page "/"
 	http.Redirect(w, r, "/", http.StatusFound)
 }
