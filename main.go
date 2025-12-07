@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"weight-tracker/config"
@@ -18,6 +19,7 @@ func main() {
 	// load config
 	c, err := config.LoadConfig()
 	if err != nil {
+		fmt.Println(err.Error())
 		log.Fatal("error loading config")
 	}
 

@@ -26,6 +26,10 @@ Contains most of the business logic.
 
 Contains logic for interacting with the storage layer.
 
+`scripts`
+
+Contains all scripts (build, local stuff, ect...)
+
 `model`
 
 Contains all data objects.

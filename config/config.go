@@ -15,8 +15,6 @@ func LoadConfig() (Config, error) {
 	env := os.Getenv("WT_APP_ENV")
 	if env == "local" {
 		err = godotenv.Load(".env.local")
-	} else {
-		err = godotenv.Load(".env.prod")
 	}
 	config := Config{
 		DBURI: os.Getenv("DB_URI"),
