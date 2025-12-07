@@ -4,6 +4,10 @@ This is an application to help people track their weight over time.
 
 It loosely follows the Controller-Service-Repo pattern found in most Java Spring Boot applications.
 
+App URL:
+
+https://afarhidev-weight-tracker-ed183f93bb4c.herokuapp.com/
+
 ## Package/Folder Overview
 
 `config`
