@@ -45,3 +45,17 @@
     border-radius: 25px;
     font-family: 'Roboto', sans-serif;
 }
+
+/* Tablets (>= 768px) */
+@media (min-width: 768px) {
+    .target-weight-entry-button  {
+        width: 40vw;
+    }
+}
+
+/* Small Desktop (>= 992px) */
+@media (min-width: 992px) {
+    .target-weight-entry-button  {
+        width: 20vw;
+    }
+}

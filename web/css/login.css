@@ -69,3 +69,17 @@
     margin-right: 10px;
     opacity: 0.8;
 }
+
+/* Tablets (>= 768px) */
+@media (min-width: 768px) {
+    .login-input, .login-button {
+        width: 40vw;
+    }
+}
+
+/* Small Desktop (>= 992px) */
+@media (min-width: 992px) {
+    .login-input, .login-button {
+        width: 20vw;
+    }
+}

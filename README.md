@@ -80,16 +80,14 @@ Run local Makefile command
 
 ## Todos
 
-- Add constraints to the weight entry forms to not allow floating numbers. [ ]
+- Unit testing.
 
-- Add a logout feature. [ ]
+- Add constraints to the weight entry forms to not allow floating numbers.
 
-- Grid view that lets you edit and update. [ ]
+- Add a logout feature.
 
-- Add placeholder values for missing weight data. [ ]
+- Grid view that lets you edit and update.
 
-- Make it look good on desktop. [ ]
+- Add placeholder values for missing weight data.
 
-- Unit testing??? [ ]
-
-- Add a prompt when the user first logs in and there is no target weight set. [ ]
+- Add a prompt when the user first logs in and there is no target weight set.
