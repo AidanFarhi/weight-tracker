@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"weight-tracker/config"
 	"weight-tracker/controller"
 	"weight-tracker/middleware"
@@ -19,7 +19,6 @@ func main() {
 	// load config
 	c, err := config.LoadConfig()
 	if err != nil {
-		fmt.Println(err.Error())
 		log.Fatal("error loading config")
 	}
 
@@ -72,7 +71,7 @@ func main() {
 
 	// create server
 	server := http.Server{
-		Addr:    ":8899",
+		Addr:    ":" + strconv.Itoa(c.Port),
 		Handler: mux,
 	}
 
