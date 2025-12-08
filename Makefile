@@ -1,6 +1,6 @@
 # run app localy
 local:
-	air
+	python ./scripts/run_local.py
 
 # sets Heroku app config and deploys
 deploy-with-config:

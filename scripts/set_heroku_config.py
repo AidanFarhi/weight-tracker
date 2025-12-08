@@ -5,4 +5,6 @@ with open(".env.prod", "r") as env_file:
 
 all_pairs = " ".join(pairs)
 
-subprocess.run(f"heroku config:set {all_pairs} --app afarhidev-weight-tracker", shell=True)
+subprocess.run(
+    f"heroku config:set {all_pairs} --app afarhidev-weight-tracker", shell=True
+)
