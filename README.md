@@ -86,9 +86,11 @@ Run Makefile command
 
 - Unit testing.
 
-- Add constraints to the weight entry forms to not allow floating numbers.
+- Make mobile look good.
 
 - Add a logout feature.
+
+- Add constraints to the weight entry forms to not allow floating numbers.
 
 - Grid view that lets you edit and update.
 
