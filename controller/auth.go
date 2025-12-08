@@ -46,8 +46,10 @@ func (ac *AuthController) PostLogin(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
+		return
 	}
 	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// store session id in cookie
@@ -58,10 +60,9 @@ func (ac *AuthController) PostLogin(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 		Secure:   true,
 		SameSite: http.SameSiteStrictMode,
-		// Expires:  time.Now().Add(24 * time.Hour),
+		MaxAge:   24 * 60 * 60 * 30, // 30 days in seconds
 	}
 	http.SetCookie(w, cookie)
-
 	// redirect to home page "/"
 	http.Redirect(w, r, "/", http.StatusFound)
 }

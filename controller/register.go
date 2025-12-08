@@ -101,9 +101,8 @@ func (rc *RegisterController) PostRegister(w http.ResponseWriter, r *http.Reques
 		HttpOnly: true,
 		Secure:   true,
 		SameSite: http.SameSiteStrictMode,
-		// Expires:  time.Now().Add(24 * time.Hour),
+		MaxAge:   24 * 60 * 60 * 30, // 30 days in seconds
 	}
 	http.SetCookie(w, cookie)
-	// redirect to home page "/"
 	http.Redirect(w, r, "/", http.StatusFound)
 }
