@@ -25,6 +25,15 @@ func (w *weightRepoStub) GetLatestWeightEntryForUser(userId int, category string
 }
 
 func TestGetNDailyWeightEntriesByUserIdGivenNoIssues(t *testing.T) {
+	wr := &weightRepoStub{}
+	ws := NewWeightService(wr)
+	_, err := ws.GetNDailyWeightEntriesByUserId(1, 10)
+	if err != nil {
+		t.Fatalf("expected nil, got %v", err)
+	}
+}
+
+func TestGetNDailyWeightEntriesByUserIdGivenDBError(t *testing.T) {
 	wr := &weightRepoStub{err: errors.New("DB error")}
 	ws := NewWeightService(wr)
 	_, err := ws.GetNDailyWeightEntriesByUserId(1, 10)
