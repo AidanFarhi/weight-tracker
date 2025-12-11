@@ -4,11 +4,11 @@ local:
 
 # run tests with coverage
 cover:
-	go test -cover ./service ./controller ./middleware ./repo
+	go test -cover ./service
 
 # run tests
 test:
-	go test ./service ./controller ./middleware ./repo
+	go test ./service
 
 # deploy to Heroku
 deploy: test
