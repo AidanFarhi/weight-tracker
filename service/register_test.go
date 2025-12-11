@@ -6,26 +6,6 @@ import (
 	"weight-tracker/repo"
 )
 
-type userRepoStub struct {
-	exists bool
-	err    error
-}
-
-func (u *userRepoStub) CheckIfUserExists(email string) (bool, error) {
-	return u.exists, u.err
-}
-func (u *userRepoStub) CreateUser(email, hashed string) (int, error) {
-	return 123, nil
-}
-
-type sessionRepoStub struct {
-	err error
-}
-
-func (s *sessionRepoStub) CreateSession(id string, uid int) error {
-	return s.err
-}
-
 func TestRegisterGivenNoIssues(t *testing.T) {
 	ur := &userRepoStub{}
 	sr := &sessionRepoStub{}

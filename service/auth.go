@@ -5,11 +5,11 @@ import (
 )
 
 type AuthService struct {
-	ur *repo.UserRepo
-	sr *repo.SessionRepo
+	ur UserRepo
+	sr SessionRepo
 }
 
-func NewAuthService(ur *repo.UserRepo, sr *repo.SessionRepo) *AuthService {
+func NewAuthService(ur UserRepo, sr SessionRepo) *AuthService {
 	return &AuthService{
 		ur: ur,
 		sr: sr,
@@ -42,8 +42,6 @@ func (as *AuthService) Login(email, password string) (string, error) {
 	// return newly created session id
 	return sessionId, nil
 }
-
-func (as *AuthService) Logout() {}
 
 func (as *AuthService) ValidateSession(sessionId string) (int, error) {
 	userId, err := as.sr.GetUserIdForSession(sessionId)

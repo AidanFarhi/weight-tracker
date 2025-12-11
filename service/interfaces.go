@@ -5,10 +5,12 @@ import "weight-tracker/model"
 type UserRepo interface {
 	CheckIfUserExists(email string) (bool, error)
 	CreateUser(email, hashedPassword string) (int, error)
+	GetUserByEmail(email string) (model.User, error)
 }
 
 type SessionRepo interface {
 	CreateSession(sessionId string, userId int) error
+	GetUserIdForSession(sessionId string) (int, error)
 }
 
 type WeightRepo interface {
