@@ -41,3 +41,84 @@ func TestGetNDailyWeightEntriesByUserIdGivenDBError(t *testing.T) {
 		t.Fatalf("expected ErrDBIssue, got %v", err)
 	}
 }
+
+func TestGetDailyWeightEntryForUserGivenNoIssues(t *testing.T) {
+	wr := &weightRepoStub{}
+	ws := NewWeightService(wr)
+	_, err := ws.GetLatestDailyWeightEntryForUser(1)
+	if err != nil {
+		t.Fatalf("expected nil, got %v", err)
+	}
+}
+
+func TestGetDailyWeightEntryForUserGivenDBError(t *testing.T) {
+	wr := &weightRepoStub{err: errors.New("DB error")}
+	ws := NewWeightService(wr)
+	_, err := ws.GetLatestDailyWeightEntryForUser(1)
+	if err != ErrDBIssue {
+		t.Fatalf("expected ErrDBIssue, got %v", err)
+	}
+}
+
+func TestGetTargetWeightForUserGivenNoIssues(t *testing.T) {
+	wr := &weightRepoStub{}
+	ws := NewWeightService(wr)
+	_, err := ws.GetLatestTargetWeightForUser(1)
+	if err != nil {
+		t.Fatalf("expected nil, got %v", err)
+	}
+}
+
+func TestGetTargetWeightForUserGivenDBError(t *testing.T) {
+	wr := &weightRepoStub{err: errors.New("DB error")}
+	ws := NewWeightService(wr)
+	_, err := ws.GetLatestTargetWeightForUser(1)
+	if err != ErrDBIssue {
+		t.Fatalf("expected ErrDBIssue, got %v", err)
+	}
+}
+
+func TestCreateDailyWeightEntryGivenNoIssues(t *testing.T) {
+	wr := &weightRepoStub{}
+	ws := NewWeightService(wr)
+	err := ws.CreateDailyWeightEntry(1, 100, "2025-01-01")
+	if err != nil {
+		t.Fatalf("expected nil, got %v", err)
+	}
+}
+
+func TestCreateDailyWeightEntryGivenBadDate(t *testing.T) {
+	wr := &weightRepoStub{}
+	ws := NewWeightService(wr)
+	err := ws.CreateDailyWeightEntry(1, 100, "BAD_DATE")
+	if err != ErrDateParseIssue {
+		t.Fatalf("expected ErrDateParseIssue, got %v", err)
+	}
+}
+
+func TestCreateDailyWeightEntryGivenDBError(t *testing.T) {
+	wr := &weightRepoStub{err: errors.New("DB Error")}
+	ws := NewWeightService(wr)
+	err := ws.CreateDailyWeightEntry(1, 100, "2025-01-01")
+	if err != ErrDBIssue {
+		t.Fatalf("expected ErrDBIssue, got %v", err)
+	}
+}
+
+func TestCreateTargetWeightEntryGivenNoIssues(t *testing.T) {
+	wr := &weightRepoStub{}
+	ws := NewWeightService(wr)
+	err := ws.CreateTargetWeightEntry(1, 100)
+	if err != nil {
+		t.Fatalf("expected nil, got %v", err)
+	}
+}
+
+func TestCreateTargetWeightEntryGivenDBError(t *testing.T) {
+	wr := &weightRepoStub{err: errors.New("DB Error")}
+	ws := NewWeightService(wr)
+	err := ws.CreateTargetWeightEntry(1, 100)
+	if err != ErrDBIssue {
+		t.Fatalf("expected ErrDBIssue, got %v", err)
+	}
+}
