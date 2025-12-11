@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 .home-top-banner {
@@ -15,6 +15,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100vw;
+    padding-top: 6vh;
 }
 
 .home-top-banner-text {
@@ -63,8 +64,12 @@
 #weight-chart {
     width: 100%;
     max-width: 90vw;
-    max-height: 40vh;
+    /* max-height: 40vh; */
     height: auto;
+}
+
+#weight-entry-link {
+    padding-bottom: 2vh;
 }
 
 .plus-icon {
