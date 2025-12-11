@@ -2,9 +2,13 @@
 local:
 	python ./scripts/run_local.py
 
+# run tests with coverage
+cover:
+	go test -cover ./service ./controller ./middleware ./repo
+
 # run tests
 test:
-	go test -cover ./service ./controller ./middleware ./repo
+	go test ./service ./controller ./middleware ./repo
 
 # deploy to Heroku
 deploy: test
