@@ -1,7 +1,7 @@
 .home-main-container {
     background-color: #141414;
     color: rgb(240, 240, 240);
-    height: 100vh;
+    height: 100dvh;
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -63,6 +63,7 @@
 #weight-chart {
     width: 100%;
     max-width: 90vw;
+    max-height: 40vh;
     height: auto;
 }
 
