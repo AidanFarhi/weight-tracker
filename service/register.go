@@ -5,11 +5,11 @@ import (
 )
 
 type RegisterService struct {
-	ur *repo.UserRepo
-	sr *repo.SessionRepo
+	ur UserRepo
+	sr SessionRepo
 }
 
-func NewRegisterService(ur *repo.UserRepo, sr *repo.SessionRepo) *RegisterService {
+func NewRegisterService(ur UserRepo, sr SessionRepo) *RegisterService {
 	return &RegisterService{
 		ur: ur,
 		sr: sr,

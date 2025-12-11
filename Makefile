@@ -2,11 +2,18 @@
 local:
 	python ./scripts/run_local.py
 
-# sets Heroku app config and deploys
-deploy-with-config:
-	python ./scripts/set_heroku_config.py
-	git push heroku main
+# run tests
+test:
+	go test -cover ./service ./controller ./middleware ./repo
 
 # deploy to Heroku
-deploy:
+deploy: test
 	git push heroku main
+
+# sets Heroku app config
+update-heroku-config:
+	python ./scripts/set_heroku_config.py
+
+# sets Heroku app config and deploys
+deploy-with-config: update-heroku-config
+	$(MAKE) deploy

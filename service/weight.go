@@ -3,14 +3,13 @@ package service
 import (
 	"time"
 	"weight-tracker/model"
-	"weight-tracker/repo"
 )
 
 type WeightService struct {
-	wr *repo.WeightRepo
+	wr WeightRepo
 }
 
-func NewWeightService(wr *repo.WeightRepo) *WeightService {
+func NewWeightService(wr WeightRepo) *WeightService {
 	return &WeightService{wr}
 }
 
