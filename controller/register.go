@@ -100,7 +100,7 @@ func (rc *RegisterController) PostRegister(w http.ResponseWriter, r *http.Reques
 		Path:     "/",
 		HttpOnly: true,
 		Secure:   true,
-		SameSite: http.SameSiteLaxMode,
+		SameSite: http.SameSiteStrictMode,
 		MaxAge:   24 * 60 * 60 * 30, // 30 days in seconds
 	}
 	http.SetCookie(w, cookie)

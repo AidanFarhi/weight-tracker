@@ -31,7 +31,7 @@ func (am *AuthMiddleware) RequireAuth(next http.HandlerFunc) http.HandlerFunc {
 				MaxAge:   -1,
 				HttpOnly: true,
 				Secure:   true,
-				SameSite: http.SameSiteLaxMode,
+				SameSite: http.SameSiteStrictMode,
 			}
 			http.SetCookie(w, expiredCookie)
 			http.Redirect(w, r, "/login", http.StatusFound)
@@ -63,7 +63,7 @@ func (am *AuthMiddleware) RedirectIfLoggedIn(next http.HandlerFunc) http.Handler
 				MaxAge:   -1,
 				HttpOnly: true,
 				Secure:   true,
-				SameSite: http.SameSiteLaxMode,
+				SameSite: http.SameSiteStrictMode,
 			}
 			http.SetCookie(w, expiredCookie)
 			next(w, r)
